@@ -1,15 +1,16 @@
 import Vue from 'vue'
+
+import Router from 'vue-router'
 import VueLocalStorage from 'vue-localstorage'
 import ElementUI from 'element-ui'
-import App from 'App'
-import router from 'router'
 
+import App from 'App'
+
+Vue.use(Router)
 Vue.use(VueLocalStorage)
 Vue.use(ElementUI)
 
 new Vue({
   el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+  render: h => h(App)
 })

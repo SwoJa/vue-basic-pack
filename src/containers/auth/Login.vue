@@ -15,7 +15,8 @@
 
 <script>
 import { login } from 'apis/auth'
-import { setUserInfo } from 'store'
+import { queryUserInfo, queryUserMenu } from 'apis/user'
+import { setUserInfo, getUserInfo, setUserMenu } from 'store'
 
 export default {
   data() {
@@ -48,16 +49,31 @@ export default {
   },
   methods: {
     submitForm(name) {
-      var userName = this.ruleForm.userName, password = this.ruleForm.password;
+      var userName = this.ruleForm.userName, password = this.ruleForm.password
 
       this.$refs[name].validate((valid) => {
         if (!valid) return this.$message.error('Validation Error'); //TODO: translation
 
         login(userName, password).then(function (result) {
-          setUserInfo({
+          var user = {
             userName: userName,
             token: result.access_token
-          })
+          }
+
+          setUserInfo(user)
+
+          return queryUserInfo(user)
+        }).then(function (result) {
+          var user = Object.assign(getUserInfo(), {
+            roleID: result.roleID
+          });
+
+          setUserInfo(user)
+
+          return queryUserMenu(user)
+        }).then(function (menu) {
+          setUserMenu(menu)
+          console.log(menu)
         }).catch((error) => {
           this.$message.error(error.message)
         })
