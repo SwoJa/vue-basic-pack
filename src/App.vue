@@ -8,31 +8,50 @@ import Desktop from 'components/Desktop'
 import Backend from 'components/Backend'
 import Login from 'containers/auth/Login'
 import { getBackendRoutes } from 'containers/func'
+import { getUserInfo } from 'store'
+
+var router = new Router({
+  routes: [
+    {
+      path: '/', //dependency with Menu.vue's backendRoot
+      name: 'Desktop',
+      component: Desktop,
+      children: [
+        {
+          path: 'login', //dependency with Top.vue's login path
+          name: 'Login',
+          component: Login,
+        },
+        {
+          path: 'backend', //dependency with Menu.vue's backendRoot and Login.vue's entry point
+          name: 'Backend',
+          component: Backend,
+          children: getBackendRoutes(),
+        },
+      ]
+    },
+    {
+      path: '*',
+      name: 'Any',
+      component: Login,
+    },
+  ],
+});
+
+router.beforeEach((to, from, next) => {
+  var loginPath = '/login';
+
+  if (to.path === loginPath) return next();
+
+  var user = getUserInfo();
+  if (!user || !user.userName || !user.token) return next(loginPath);
+
+  next()
+});
 
 export default {
   name: 'App',
-  router: new Router({
-    routes: [
-      {
-        path: '/', //dependency with Menu.vue's backendRoot
-        name: 'Desktop',
-        component: Desktop,
-        children: [
-          {
-            path: 'login',
-            name: 'Login',
-            component: Login,
-          },
-          {
-            path: 'backend', //dependency with Menu.vue's backendRoot
-            name: 'Backend',
-            component: Backend,
-            children: getBackendRoutes()
-          }
-        ]
-      },
-    ]
-  })
+  router: router
 }
 </script>
 

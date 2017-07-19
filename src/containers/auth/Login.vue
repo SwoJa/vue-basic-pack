@@ -1,30 +1,32 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" :ref="ruleFormName">
-    <el-form-item label="名称" prop="userName">
+    <el-form-item :label="'userName' | t" prop="userName">
       <el-input type="text" v-model="ruleForm.userName"></el-input>
     </el-form-item>
-    <el-form-item label="密码" prop="password">
+    <el-form-item :label="'password' | t" prop="password">
       <el-input type="password" v-model="ruleForm.password"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormName)">提交</el-button>
-      <el-button @click="resetForm(ruleFormName)">重置</el-button>
+      <el-button type="primary" @click="submitForm(ruleFormName)">{{ 'logIn' | t }}</el-button>
+      <el-button @click="resetForm(ruleFormName)">{{ 'reset' | t }}</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
+import Vue from 'vue'
 import { login } from 'apis/auth'
 import { queryUserInfo, queryUserMenu } from 'apis/user'
 import { setUserInfo, getUserInfo, setUserMenu } from 'store'
+import { getBaseRoute } from 'containers/func'
 
 export default {
   data() {
     var validateUserName = (rule, value, callback) => {
-      value === '' ? callback(new Error('请输入名称')) : callback()
+      value === '' ? callback(new Error(Vue.filter('t')('userNameEmptyError'))) : callback()
     };
     var validatePassword = (rule, value, callback) => {
-      value === '' ? callback(new Error('请输入密码')) : callback()
+      value === '' ? callback(new Error(Vue.filter('t')('passwordEmptyError'))) : callback()
     };
 
     return {
@@ -52,7 +54,7 @@ export default {
       var userName = this.ruleForm.userName, password = this.ruleForm.password
 
       this.$refs[name].validate((valid) => {
-        if (!valid) return this.$message.error('Validation Error'); //TODO: translation
+        if (!valid) return this.$message.error(Vue.filter('t')('loginFail')); //TODO: translation
 
         login(userName, password).then(function (result) {
           var user = {
@@ -71,9 +73,10 @@ export default {
           setUserInfo(user)
 
           return queryUserMenu(user)
-        }).then(function (menu) {
+        }).then((menu) => {
           setUserMenu(menu)
-          console.log(menu)
+
+          this.$router.push('/backend/' + getBaseRoute()); //dependency with App.vue's backend path and Menu.vue's backendRoot
         }).catch((error) => {
           this.$message.error(error.message)
         })

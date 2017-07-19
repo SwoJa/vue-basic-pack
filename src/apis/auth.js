@@ -13,3 +13,11 @@ export function login(userName, password) {
     }
   })
 }
+
+export function logout(user) {
+  return postForm(API_HOST + '/BM/User/logout', {}, {
+    headers: {
+      Authorization: 'Bearer ' + user.token
+    }
+  })
+}

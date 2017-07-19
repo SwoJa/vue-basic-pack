@@ -1,17 +1,17 @@
 import R from 'ramda'
-import { getUserMenu } from 'store'
+import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
 import Test01 from 'containers/func/Test01'
 
 var routeTree = {
-  'D001': { title: 'restingOrderManage', children: {
-    'F001001': { title: 'rateSourceManage', func: Test01 },
-    'F001002': { title: 'defaultExchangeHistoryList', func: Test01 },
-    'F001003': { title: 'pendingOrderManage', func: Test01 },
-    'F001004/:id': { title: 'pendingOrderDetail', func: Test01 },
-    'F001005': { title: 'pendingOrderCancel', func: Test01 },
-  }},
+  // 'D001': { title: 'restingOrderManage', children: {
+  //   'F001001': { title: 'rateSourceManage', func: Test01 },
+  //   'F001002': { title: 'defaultExchangeHistoryList', func: Test01 },
+  //   'F001003': { title: 'pendingOrderManage', func: Test01 },
+  //   'F001004/:id': { title: 'pendingOrderDetail', func: Test01 },
+  //   'F001005': { title: 'pendingOrderCancel', func: Test01 },
+  // }},
   'D002': { title: 'reportManage', children: {
     'F002001': { title: 'orderReport', func: Test01 },
     'F002002': { title: 'depositReport', func: Test01 },
@@ -49,11 +49,29 @@ var routeTree = {
   }},
 };
 
+var baseIndexMapper = {
+  normal: ['D004', 'F004001'],
+  admin: ['D003', 'F003001'],
+  accountant: ['D002', 'F002001'],
+};
+
 var firstValue = R.compose(R.nth(1), R.head, R.toPairs);
 var menuItem = R.compose(R.map((pair) => ({
   index: pair[0],
   title: pair[1].title
 })), R.toPairs);
+
+export function getBaseIndex() {
+  var user = getUserInfo()
+
+  return R.last(baseIndexMapper[user.roleID])
+}
+
+export function getBaseRoute() {
+  var user = getUserInfo()
+ 
+  return baseIndexMapper[user.roleID].join('/')
+}
 
 export function getBackendMenu(index) {
   var menu = getUserMenu();
