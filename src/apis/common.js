@@ -1,5 +1,6 @@
 import axios from 'axios'
 import R from 'ramda'
+import { formData } from 'utils/common'
 
 export function postForm(url, data, options) {
   return axios({
@@ -31,22 +32,3 @@ function catchError(error) {
   throw new Error(error.response && error.response.data ? error.response.data.message : error.message)
 }
 
-function queryParams(params) {
-  Object.keys(params).forEach((k) => {
-    if (!params[k]) delete params[k]
-  })
-
-  return '?' + Object.keys(params)
-    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    .join('&')
-}
-
-function formData(params) {
-  Object.keys(params).forEach((k) => {
-    if (!params[k]) delete params[k]
-  })
-
-  return Object.keys(params)
-    .map(k => k + '=' + params[k])
-    .join('&')
-}

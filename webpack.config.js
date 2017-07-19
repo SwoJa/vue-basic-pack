@@ -51,7 +51,7 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
   },
   performance: {
     hints: false
@@ -59,7 +59,8 @@ module.exports = {
   devtool: '#eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
-      API_HOST: `"${process.env.API_HOST || '/api'}"`,
+      API_HOST: "'http://localhost:8005'",
+      REPORT_SERVICE_HOST: "'http://192.168.51.150:8087/ReportServer?%2fSIT_TradingP_Backend'",
       PUBLIC_PATH: "'/'",
     }),
     new webpack.NamedModulesPlugin()

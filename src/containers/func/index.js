@@ -3,6 +3,8 @@ import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
 import Test01 from 'containers/func/Test01'
+import BlankReport from 'components/BlankReport'
+import { queryParams } from 'utils/common'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -13,11 +15,11 @@ var routeTree = {
   //   'F001005': { title: 'pendingOrderCancel', func: Test01 },
   // }},
   'D002': { title: 'reportManage', children: {
-    'F002001': { title: 'orderReport', func: Test01 },
-    'F002002': { title: 'depositReport', func: Test01 },
-    'F002003': { title: 'withdrawalReport', func: Test01 },
-    'F002004': { title: 'withdrawalApplyCheckList', func: Test01 },
-    'F002005': { title: 'withdrawalApplyCheckDetail', func: Test01 },
+    'F002001': { title: 'orderReport', func: BlankReport, args: { reportName: 'OrderReport' } },
+    'F002002': { title: 'depositReport', func: BlankReport, args: { reportName: 'DepositReport' } },
+    'F002003': { title: 'withdrawalReport', func: BlankReport, args: { reportName: 'WithdrawalReport' } },
+    'F002004': { title: 'withdrawalApplyCheckList', func: BlankReport, args: { reportName: 'WithdrawalApplyCheckList' } },
+    'F002005': { title: 'withdrawalApplyCheckDetail', func: BlankReport, args: { reportName: 'WithdrawalApplyCheckDetail' } },
   }},
   'D003': { title: 'systemSetting', children: {
     'F003001': { title: 'chargeFeeConfigManage', func: Test01 },
@@ -52,14 +54,17 @@ var routeTree = {
 var baseIndexMapper = {
   normal: ['D004', 'F004001'],
   admin: ['D003', 'F003001'],
-  accountant: ['D002', 'F002001'],
+  accountant: ['D002', 'F002001?reportName=OrderReport'],
 };
 
 var firstValue = R.compose(R.nth(1), R.head, R.toPairs);
-var menuItem = R.compose(R.map((pair) => ({
-  index: pair[0],
-  title: pair[1].title
-})), R.toPairs);
+var baseIndex = R.compose(R.head, R.split('?'));
+var menuItem = R.compose(R.map((pair) => {
+  return {
+    index: pair[0] + (pair[1].args ? queryParams(pair[1].args) : ''),
+    title: pair[1].title
+  }
+}), R.toPairs);
 
 export function getBaseIndex() {
   var user = getUserInfo()
@@ -78,7 +83,7 @@ export function getBackendMenu(index) {
 
   if (index) {
     return R.filter(function(route) {
-      return menu.childs[index].childs[route.index]
+      return menu.childs[index].childs[baseIndex(route.index)]
     }, menuItem((routeTree[index]).children))
   } else {
     return R.filter(function(route) {

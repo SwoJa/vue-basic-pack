@@ -5,8 +5,8 @@
   "author": "Faust Fu <faust.fu@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development API_HOST=http://localhost:8005 webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production API_HOST=http://localhost:8005 webpack --progress --hide-modules"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "build:test": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
     "axios": "0.16.2",

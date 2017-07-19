@@ -1,10 +1,10 @@
 <template>
-  <div>Test03({{ path }})</div>
+  <div>Test01({{ path }})</div>
 </template>
 
 <script>
 export default {
-  name: 'Test03',
+  name: 'Test01',
   computed: {
     path: function () {
       return this.$route.path
