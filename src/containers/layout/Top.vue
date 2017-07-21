@@ -21,11 +21,15 @@ export default {
   },
   methods: {
     handleLogout() {
-      logout(this.userInfo).then(() => {
+      var self = this
+
+      logout(self.userInfo).then(() => {
         setUserInfo({})
         setUserMenu({})
         
-        this.$router.push('/login') //dependency with App.vue's login path
+        self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue's login path
+      }).catch((error) => {
+        self.$message.error(error.message)
       })
     }
   },

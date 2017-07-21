@@ -13,7 +13,7 @@ import { getUserInfo } from 'store'
 var router = new Router({
   routes: [
     {
-      path: '/', //dependency with Menu.vue's backendRoot
+      path: PUBLIC_PATH, //dependency with Menu.vue's backendRoot
       name: 'Desktop',
       component: Desktop,
       children: [
@@ -39,7 +39,7 @@ var router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  var loginPath = '/login';
+  var loginPath = PUBLIC_PATH + 'login';
 
   if (to.path === loginPath) return next();
 

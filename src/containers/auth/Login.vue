@@ -51,10 +51,10 @@ export default {
   },
   methods: {
     submitForm(name) {
-      var userName = this.ruleForm.userName, password = this.ruleForm.password
+      var self = this, userName = self.ruleForm.userName, password = self.ruleForm.password
 
-      this.$refs[name].validate((valid) => {
-        if (!valid) return this.$message.error(Vue.filter('t')('loginFail')); //TODO: translation
+      self.$refs[name].validate((valid) => {
+        if (!valid) return self.$message.error(Vue.filter('t')('loginFail'));
 
         login(userName, password).then(function (result) {
           var user = {
@@ -76,9 +76,9 @@ export default {
         }).then((menu) => {
           setUserMenu(menu)
 
-          this.$router.push('/backend/' + getBaseRoute()); //dependency with App.vue's backend path and Menu.vue's backendRoot
+          self.$router.push(PUBLIC_PATH + 'backend/' + getBaseRoute()); //dependency with App.vue's backend path and Menu.vue's backendRoot
         }).catch((error) => {
-          this.$message.error(error.message)
+          self.$message.error(error.message)
         })
       });
     },

@@ -10,7 +10,7 @@
 <script>
 import { getBackendMenu, getBaseIndex } from 'containers/func'
 
-var backendRoot = '/backend/' //dependency with App.vue's backend path and Login.vue's entry point
+var backendRoot = PUBLIC_PATH + 'backend/' //dependency with App.vue's backend path and Login.vue's entry point
 
 export default {
   name: 'Menu',

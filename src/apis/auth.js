@@ -7,11 +7,7 @@ export function login(userName, password) {
     grant_type: 'password',
   }, url = API_HOST + '/Login'
 
-  return postForm(url, data, {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
+  return postForm(url, data, {})
 }
 
 export function logout(user) {

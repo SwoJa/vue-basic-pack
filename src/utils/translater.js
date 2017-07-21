@@ -1,7 +1,7 @@
 import R from 'ramda'
 
 export function t(index) {
-  return index ? mapper[index.toString()] : ''
+  return index ? (mapper[index.toString()] || index ) : ''
 }
 
 var mapper = {
@@ -767,4 +767,6 @@ var mapper = {
   highestBid: '最高成交价',
   lowestUnitBidPercentage: '最低单价百分比',
   highestUnitBidPercentage: '最高单价百分比',
+
+  operation: '操作',
 };

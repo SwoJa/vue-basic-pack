@@ -3,6 +3,7 @@ import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
 import Test01 from 'containers/func/Test01'
+import Nation from 'containers/func/SS/Nation'
 import BlankReport from 'components/BlankReport'
 import { queryParams } from 'utils/common'
 
@@ -29,7 +30,7 @@ var routeTree = {
     'F003005': { title: 'configManage', func: Test01 },
     'F003006': { title: 'countryManage', func: Test01 },
     'F003007': { title: 'bankManage', func: Test01 },
-    'F003008': { title: 'nationManage', func: Test01 },
+    'F003008': { title: 'nationManage', func: Nation },
     'F003009': { title: 'preferCurrencyManage', func: Test01 },
     'F003010': { title: 'preferTransCountryManage', func: Test01 },
     'F003011': { title: 'productManage', func: Test01 },
