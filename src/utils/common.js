@@ -8,7 +8,7 @@ export function get(index) {
   return R.prop(index)
 }
 
-export function map(rule) {
+export function optionMap(rule) {
   return R.compose(
     R.map((pair) => (rule(pair[0], pair[1]))), //do rule with value and index
     R.map((pair) => ([pair[0], parseInt(pair[1])])), //convert index type from string to integer

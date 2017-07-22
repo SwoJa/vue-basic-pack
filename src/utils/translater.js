@@ -692,8 +692,6 @@ var mapper = {
 
   billboardManage: '公布栏管理',
   billBoardType: '类型',
-  billboardType_news: '新闻',
-  billboardType_maintenance: '维护公告',
   isWEB: '网页讯息',
   isAPP: '推播',
   isEmail: '电子邮件',

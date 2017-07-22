@@ -34,7 +34,7 @@ export default {
       return getOPs(this.operation)
     },
     opsWidth: function() {
-      return this.ops && (40 + 60 * this.ops.length) || 0
+      return this.ops && (28 + 54 * this.ops.length) || 0
     },
     listColumns: function() {
       return getListColumns(this.schema)

@@ -2,13 +2,24 @@ import R from 'ramda'
 import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
+import BlankReport from 'components/BlankReport'
+import { queryParams } from 'utils/common'
+
 import Test01 from 'containers/func/Test01'
 import ChargeFeeConfig from 'containers/func/SS/ChargeFeeConfig'
 import DiscountTypeConfig from 'containers/func/SS/DiscountTypeConfig'
 import Config from 'containers/func/SS/Config'
 import OrderAmountLimit from 'containers/func/SS/OrderAmountLimit'
-import BlankReport from 'components/BlankReport'
-import { queryParams } from 'utils/common'
+import Bank from 'containers/func/CS/Bank'
+import BillboardType from 'containers/func/CS/BillboardType'
+import Country from 'containers/func/CS/Country'
+import Currency from 'containers/func/CS/Currency'
+import Nation from 'containers/func/CS/Nation'
+import PreferCurrency from 'containers/func/CS/PreferCurrency'
+import PreferTransCountry from 'containers/func/CS/PreferTransCountry'
+import Production from 'containers/func/PM/Production'
+import Billboard from 'containers/func/MC/Billboard'
+import Notice from 'containers/func/MC/Notice'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -29,18 +40,18 @@ var routeTree = {
     'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfig },
     'F003002': { title: 'discountTypeConfigManage', func: DiscountTypeConfig },
     'F003003': { title: 'orderAmountLimitManage', func: OrderAmountLimit },
-    'F003004': { title: 'currencyManage', func: Test01 },
+    'F003004': { title: 'currencyManage', func: Currency },
     'F003005': { title: 'configManage', func: Config },
-    'F003006': { title: 'countryManage', func: Test01 },
-    'F003007': { title: 'bankManage', func: Test01 },
-    'F003008': { title: 'nationManage', func: Test01 },
-    'F003009': { title: 'preferCurrencyManage', func: Test01 },
-    'F003010': { title: 'preferTransCountryManage', func: Test01 },
-    'F003011': { title: 'productManage', func: Test01 },
+    'F003006': { title: 'countryManage', func: Country },
+    'F003007': { title: 'bankManage', func: Bank },
+    'F003008': { title: 'nationManage', func: Nation },
+    'F003009': { title: 'preferCurrencyManage', func: PreferCurrency },
+    'F003010': { title: 'preferTransCountryManage', func: PreferTransCountry },
+    'F003011': { title: 'productManage', func: Production },
   }},
   'D004': { title: 'informationCenter', children: {
-    'F004001': { title: 'billboardManage', func: Test01 },
-    'F004002': { title: 'noticeManage', func: Test01 },
+    'F004001': { title: 'billboardManage', func: Billboard },
+    'F004002': { title: 'noticeManage', func: Notice },
   }},
   'D005': { title: 'backendManage', children: {
     'F005001': { title: 'memberManage', func: Test01 },
@@ -51,24 +62,24 @@ var routeTree = {
     'F005006': { title: 'menuManage', func: Test01 },
   }},
   'D006': { title: 'commonSetting', children: {
-    'F006001': { title: 'billboardTypeManage', func: Test01 },
+    'F006001': { title: 'billboardTypeManage', func: BillboardType },
   }},
-};
+}
 
 var baseIndexMapper = {
   normal: ['D004', 'F004001'],
   admin: ['D003', 'F003001'],
   accountant: ['D002', 'F002001?reportName=OrderReport'],
-};
+}
 
-var firstValue = R.compose(R.nth(1), R.head, R.toPairs);
-var baseIndex = R.compose(R.head, R.split('?'));
+var firstValue = R.compose(R.nth(1), R.head, R.toPairs)
+var baseIndex = R.compose(R.head, R.split('?'))
 var menuItem = R.compose(R.map((pair) => {
   return {
     index: pair[0] + (pair[1].args ? queryParams(pair[1].args) : ''),
     title: pair[1].title
   }
-}), R.toPairs);
+}), R.toPairs)
 
 export function getBaseIndex() {
   var user = getUserInfo()
