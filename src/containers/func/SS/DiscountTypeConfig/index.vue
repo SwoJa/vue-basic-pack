@@ -1,7 +1,7 @@
 <template>
   <div class="list-page">
     <el-row>
-      <el-col :span="6">{{ 'chargeFeeConfigManage' | t }}</el-col>
+      <el-col :span="6">{{ 'discountTypeConfigManage' | t }}</el-col>
       <el-col :span="1" :offset="17">
         <el-button @click="onItemAdd()" size="small">{{ 'add' | t}}</el-button>
       </el-col>
@@ -20,11 +20,11 @@ import { resources, getAllOptions } from 'apis'
 import { listMixin, initSchema } from 'containers/func/listHelper'
 import MainEditor from './MainEditor'
 
-var main = resources.chargeFeeConfig,
-  grade = resources.grade, product = resources.product, orderType = resources.orderType
+var main = resources.discountTypeConfig,
+  grade = resources.grade, discountType = resources.discountType
 
 export default {
-  name: 'ChargeFeeConfig',
+  name: 'DiscountTypeConfig',
   mixins: [listMixin],
   components: {
     MainEditor
@@ -32,8 +32,7 @@ export default {
   data() {
     return {
       gradeOptions: [],
-      productOptions: [],
-      orderTypeOptions: [],
+      discountTypeOptions: [],
     }
   },
   created() {
@@ -43,12 +42,8 @@ export default {
       self.gradeOptions = options
     }).catch(self.callError)
 
-    getAllOptions(product, true, true).then((options) => {
-      self.productOptions = options
-    }).catch(self.callError)
-
-    getAllOptions(orderType, true, true).then((options) => {
-      self.orderTypeOptions = options
+    getAllOptions(discountType, true, true).then((options) => {
+      self.discountTypeOptions = options
     }).catch(self.callError)
   },
   computed: {
@@ -65,40 +60,30 @@ export default {
             listSetter: identity,
             dataName: 'gradeID', defaultData: 'Copper',
           },
-          productID: {
-            header: 'product', getter: get('productID'), sortRank: 1,
-            listSetter: identity,
-            dataName: 'productID', defaultData: 'BTC',
+          discountType: {
+            header: 'discountType', getter: get('discountType'), sortRank: 1,
+            listSetter: (value) => (t('discountType_' + value)),
+            dataName: 'discountType', defaultData: 'Birthday',
           },
-          orderType: {
-            header: 'orderType', getter: get('orderType'), sortRank: 1,
-            listSetter: (value) => (t('orderType_' + value)),
-            dataName: 'orderType', defaultData: 'buyin',
-          },
-          manageFee: {
-            header: 'manageFee', getter: get('manageFee'), sortRank: 1,
+          discountRate: {
+            header: 'discountRate', getter: get('discountRate'), sortRank: 1,
             listSetter: identity,
-            dataName: 'manageFee', defaultData: 0,
-          },
-          chainFee: {
-            header: 'chainFee', getter: get('chainFee'), sortRank: 1,
-            listSetter: identity,
-            dataName: 'chainFee', defaultData: 0,
+            dataName: 'discountRate', defaultData: 0,
           },
           status: {
             header: 'status', getter: get('status'), sortRank: 1,
             listSetter: (value) => (t('mainStatus_' + value)),
             dataName: 'status', defaultData: 'Active',
           },
-          minManageFee: {
-            header: 'minManageFee', getter: get('minManageFee'), sortRank: 1,
-            listSetter: identity,
-            dataName: 'minManageFee', defaultData: 0,
+          startDate: {
+            header: 'startDate', getter: get('startDate'), sortRank: 1,
+            listSetter: toLocalDate,
+            dataName: 'startDate', defaultData: new Date(),
           },
-          maxManageFee: {
-            header: 'maxManageFee', getter: get('maxManageFee'), sortRank: 1,
-            listSetter: identity,
-            dataName: 'maxManageFee', defaultData: 0,
+          endDate: {
+            header: 'endDate', getter: get('endDate'), sortRank: 1,
+            listSetter: toLocalDate,
+            dataName: 'endDate', defaultData: new Date(),
           },
           remark: {
             header: 'remark', getter: get('remark'), sortRank: 1,

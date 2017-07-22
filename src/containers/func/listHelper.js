@@ -330,12 +330,18 @@ export var listEditorMixin = {
     }
   },
   computed: {
+    caller: function() {
+      return callerSelector(this.params)
+    },
+    isAdding: function() {
+      return this.caller.isAdding
+    },
     title: function() {
-      return this.getCaller().isAdding ? 'add' : 'modify'
+      return this.isAdding ? 'add' : 'modify'
     },
     mainStatusOptions: function() {
       return mainStatusOptions
-    }
+    },
   },
   watch: {
     initialData: function(newVal) {
@@ -343,9 +349,6 @@ export var listEditorMixin = {
     },
   },
   methods: {
-    getCaller: function() {
-      return callerSelector(this.params)
-    },
     handleSubmit: function() {
       editorSubmitClick(this.params, this.form)
     },

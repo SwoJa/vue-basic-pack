@@ -4,6 +4,9 @@ import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
 import Test01 from 'containers/func/Test01'
 import ChargeFeeConfig from 'containers/func/SS/ChargeFeeConfig'
+import DiscountTypeConfig from 'containers/func/SS/DiscountTypeConfig'
+import Config from 'containers/func/SS/Config'
+import OrderAmountLimit from 'containers/func/SS/OrderAmountLimit'
 import BlankReport from 'components/BlankReport'
 import { queryParams } from 'utils/common'
 
@@ -24,10 +27,10 @@ var routeTree = {
   }},
   'D003': { title: 'systemSetting', children: {
     'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfig },
-    'F003002': { title: 'discountTypeConfigManage', func: Test01 },
-    'F003003': { title: 'orderAmountLimitManage', func: Test01 },
+    'F003002': { title: 'discountTypeConfigManage', func: DiscountTypeConfig },
+    'F003003': { title: 'orderAmountLimitManage', func: OrderAmountLimit },
     'F003004': { title: 'currencyManage', func: Test01 },
-    'F003005': { title: 'configManage', func: Test01 },
+    'F003005': { title: 'configManage', func: Config },
     'F003006': { title: 'countryManage', func: Test01 },
     'F003007': { title: 'bankManage', func: Test01 },
     'F003008': { title: 'nationManage', func: Test01 },

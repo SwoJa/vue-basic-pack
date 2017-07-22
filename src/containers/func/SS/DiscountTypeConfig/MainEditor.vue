@@ -7,32 +7,22 @@
           <el-option v-for="option in gradeOptions" :key="'grade' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="'product' | t">
-        <el-select v-model="form.productID">
-          <el-option v-for="option in productOptions" :key="'product' + option.id" :label="option.text" :value="option.value"></el-option>
+      <el-form-item :label="'discountType' | t">
+        <el-select v-model="form.discountType">
+          <el-option v-for="option in discountTypeOptions" :key="'discountType' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item :label="'orderType' | t">
-        <el-select v-model="form.orderType">
-          <el-option v-for="option in orderTypeOptions" :key="'orderType' + option.id" :label="option.text" :value="option.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="'manageFee' | t">
-        <el-input-number v-model="form.manageFee" :min="0"></el-input-number>
-      </el-form-item>
-      <el-form-item :label="'chainFee' | t">
-        <el-input-number v-model="form.chainFee" :min="0"></el-input-number>
       </el-form-item>
       <el-form-item :label="'status' | t">
         <el-select v-model="form.status">
           <el-option v-for="option in mainStatusOptions" :key="'status' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="'minManageFee' | t">
-        <el-input-number v-model="form.minManageFee" :min="0"></el-input-number>
-      </el-form-item>
-      <el-form-item :label="'maxManageFee' | t">
-        <el-input-number v-model="form.maxManageFee" :min="0"></el-input-number>
+      <el-form-item :label="'dateRange' | t">
+        <el-date-picker
+          v-bind:value="[form.startDate, form.endDate]"
+          v-on:input="updateRange"
+          type="daterange">
+        </el-date-picker>
       </el-form-item>
       <el-form-item :label="'remark' | t">
         <el-input v-model="form.remark"></el-input>
@@ -53,12 +43,15 @@ export default {
     gradeOptions: function() {
       return this.caller.gradeOptions
     },
-    productOptions: function() {
-      return this.caller.productOptions
+    discountTypeOptions: function() {
+      return this.caller.discountTypeOptions
     },
-    orderTypeOptions: function() {
-      return this.caller.orderTypeOptions
-    },
+  },
+  methods: {
+    updateRange: function(value) {
+      this.form.startDate = value[0]
+      this.form.endDate = value[1]
+    }
   },
 }
 </script>
