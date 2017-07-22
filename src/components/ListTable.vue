@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table :data="listData" style="width: 100%">
+    <el-table :data="listData" style="width: 100%" :height="listHeight">
       <el-table-column v-for="column in listColumns" :key="column.prop" :prop="column.prop" :label="column.label | t"></el-table-column>
-      <el-table-column v-if="ops.length > 0" fixed="right" :label="'operation' | t">
+      <el-table-column v-if="ops.length > 0" :width="opsWidth" fixed="right" :label="'operation' | t">
         <template scope="scope">
           <el-button v-for="(op, index) in ops" :key="index"
             @click.native.prevent="op.handler(scope.$index)" size="small">
@@ -28,17 +28,20 @@ import { getOPs, getListColumns, getListData } from 'containers/func/listHelper'
 
 export default {
   name: 'ListTable',
-  props: ['list', 'schema', 'operation', 'currentPage', 'pageSize', 'total', 'handleSizeChange', 'handleCurrentChange' ],
+  props: ['list', 'schema', 'listHeight', 'operation', 'currentPage', 'pageSize', 'total', 'handleSizeChange', 'handleCurrentChange' ],
   computed: {
     ops: function () {
       return getOPs(this.operation)
+    },
+    opsWidth: function() {
+      return this.ops && (40 + 60 * this.ops.length) || 0
     },
     listColumns: function() {
       return getListColumns(this.schema)
     },
     listData: function() {
       return getListData(this.schema, this.list)
-    }
+    },
   },
 }
 </script>

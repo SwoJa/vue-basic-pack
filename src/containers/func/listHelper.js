@@ -1,9 +1,10 @@
 import R from 'ramda'
 import { identity, get, queryParams } from 'utils/common'
+import { t } from 'utils/translater'
 import { getList, create, update, remove } from 'apis'
 import ListTable from 'components/ListTable'
 
-var callerSelector = get('caller')
+export var callerSelector = get('caller')
 var dataSelector = get('data')
 var metaDataSelector = get('metaData')
 var urlSelector = get('url')
@@ -59,7 +60,7 @@ export function initState(state) {
     showEditor: false,
     isAdding: false,
     isModifying: false,
-    editingData: {},
+    initialData: {},
     metaData: {},
     isDirty: false,
     waiting: false,
@@ -113,40 +114,52 @@ function mainQueryChanged(params) {
   return true;
 }
 
+var mainStatusOptions = [
+  { id: 0, text: t('mainStatus_Active'), value: 'Active'},
+  { id: 1, text: t('mainStatus_Invalid'), value: 'Invalid'},
+];
+
+
 export function mainEditStart(params, item, meta) {
   var self = callerSelector(params)
 
   self.showEditor = true
   self.isAdding = !!meta.isAdding
   self.isModifying = !meta.isAdding
-  self.editingData = Object.assign({}, item)
+  self.initialData = Object.assign({}, item)
   self.metaData = Object.assign({}, meta)
 
   return true
-}
-
-export function mainEditChanging(params) {
-  var self = callerSelector(params)
-
-  self.editingData = dataSelector(params)
-
-  return true;
 }
 
 export function mainEditEnd(params) {
   var self = callerSelector(params)
 
   self.showEditor = false
-  self.editingData = {}
   self.metaData = {}
 
   return true;
 }
 
-export function mainItemRemove(params, resource, item) {
-  params.url = getResourceURL(resource, item, false)
+export function mainItemRemove(params, data) {
+  var self = callerSelector(params)
+
+  params.url = getResourceURL(self.schema.resource, data, false)
 
   return mainRemove(params)
+}
+
+export function editorSubmitClick(params, data) {
+  var self = callerSelector(params)
+
+  params.data = data
+  params.url = getResourceURL(self.schema.resource, data, self.isAdding)
+
+  if (self.isAdding) {
+    return mainCreate(params)
+  } else {
+    return mainUpdate(params)
+  }
 }
 
 function getResourceURL(resource, data, isAdding) {
@@ -179,17 +192,16 @@ function mainRemove(params) {
 }
 
 function mainCallAPI(params, callee) {
-  var self = callerSelector(params)
+  var self = callerSelector(params), data = dataSelector(params)
 
   processingHelper(params)
 
-  return callee(urlSelector(params), self.editingData).then(function (result) {
+  return callee(urlSelector(params), data).then(function (result) {
     successHelper(params)
 
     self.showEditor = false
     self.isAdding = false
     self.isModifying = isModifying
-    self.editingData = {}
     self.metaData = {}
     self.one = result
 
@@ -234,6 +246,11 @@ export var listMixin = {
   data() {
     return initState()
   },
+  computed: {
+    listHeight: function() {
+      return window && (window.innerHeight - 180) || 480
+    },    
+  },
   mounted: function () {
     this.reloadList()
   },
@@ -242,10 +259,15 @@ export var listMixin = {
       return { caller: this }
     },
     getList,
+    getInitialData(params) {
+      var self = callerSelector(params)
+
+      return Object.assign({}, self.initialData)
+    },
     reloadList() {
       var self = this
 
-      self.getList(self.main, self.currentPage, self.pageSize).then((rows) => {
+      self.getList(self.schema.resource, self.currentPage, self.pageSize).then((rows) => {
         self.isDirty = false
         self.list = rows
         self.total = rows.total
@@ -271,6 +293,9 @@ export var listMixin = {
         self.reloadList()
       })
     },
+    callError(error) {
+      this.$message.error(error.message)
+    },
     onItemAdd() {
       var self = this
 
@@ -284,9 +309,7 @@ export var listMixin = {
     onItemRemove(index) {
       var self = this
 
-      return mainItemRemove(self.getParams(), self.main, self.list[index]).catch((error) => {
-        self.$message.error(error.message)
-      })
+      return mainItemRemove(self.getParams(), self.list[index]).catch(self.callError)
     },
   },
   watch: {
@@ -296,5 +319,38 @@ export var listMixin = {
   },
   components: {
     ListTable
-  }
+  },
+}
+
+export var listEditorMixin = {
+  props: [ 'showEditor', 'initialData', 'params' ],
+  data() {
+    return {
+      form: {}
+    }
+  },
+  computed: {
+    title: function() {
+      return this.getCaller().isAdding ? 'add' : 'modify'
+    },
+    mainStatusOptions: function() {
+      return mainStatusOptions
+    }
+  },
+  watch: {
+    initialData: function(newVal) {
+      this.form = newVal
+    },
+  },
+  methods: {
+    getCaller: function() {
+      return callerSelector(this.params)
+    },
+    handleSubmit: function() {
+      editorSubmitClick(this.params, this.form)
+    },
+    handleCancel: function() {
+      mainEditEnd(this.params)
+    }
+  },
 }

@@ -89,11 +89,11 @@ var fakedGradeList = [
 ];
 
 var fakedOrderTypeList = [
-  { id: 'deposit', description: 'deposit' },
-  { id: 'withdrawal', description: 'withdrawal' },
-  { id: 'csadjust', description: 'csadjust' },
-  { id: 'sellout', description: 'sellout' },
-  { id: 'buyin', description: 'buyin' },
+  { id: 'deposit', description: 'orderType_deposit' },
+  { id: 'withdrawal', description: 'orderType_withdrawal' },
+  { id: 'csadjust', description: 'orderType_csadjust' },
+  { id: 'sellout', description: 'orderType_sellout' },
+  { id: 'buyin', description: 'orderType_buyin' },
 ];
 
 var fakedDiscountTypeList = [

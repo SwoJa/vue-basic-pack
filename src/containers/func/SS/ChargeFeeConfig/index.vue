@@ -1,36 +1,63 @@
 <template>
-  <div>
-    Nation
-    <ListTable :list="list" :schema="schema" :operation="operation" :currentPage="currentPage" :pageSize="pageSize" :total="total" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange">
+  <div class="list-page">
+    <el-row>
+      <el-col :span="6">{{ 'chargeFeeConfigManage' | t }}</el-col>
+      <el-col :span="1" :offset="17">
+        <el-button @click="onItemAdd()" size="small">{{ 'add' | t}}</el-button>
+      </el-col>
+    </el-row>
+    <ListTable :list="list" :schema="schema" :listHeight="listHeight" :operation="operation" :currentPage="currentPage" :pageSize="pageSize" :total="total" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange">
     </ListTable>
+    <MainEditor :showEditor="showEditor" :initialData="getInitialData(getParams())" :params="getParams()"></MainEditor>
   </div>
 </template>
 
 <script>
-import { identity, get, toMark } from 'utils/common'
+import { identity, get } from 'utils/common'
 import { t } from 'utils/translater'
 import { toLocalDate } from 'utils/date'
-import { resources } from 'apis'
-import {
-  listMixin, initSchema,
-} from 'containers/func/listHelper'
+import { resources, getAllOptions } from 'apis'
+import { listMixin, initSchema } from 'containers/func/listHelper'
+import MainEditor from './MainEditor'
 
-var main = resources.chargeFeeConfig
+var main = resources.chargeFeeConfig,
+  grade = resources.grade, product = resources.product, orderType = resources.orderType
 
 export default {
-  name: 'Nation',
+  name: 'ChargeFeeConfig',
   mixins: [listMixin],
+  components: {
+    MainEditor
+  },
+  data() {
+    return {
+      gradeOptions: [],
+      productOptions: [],
+      orderTypeOptions: [],
+    }
+  },
+  created() {
+    var self = this
+
+    getAllOptions(grade, true, true).then((options) => {
+      self.gradeOptions = options
+    }).catch(self.callError)
+
+    getAllOptions(product, true, true).then((options) => {
+      self.productOptions = options
+    }).catch(self.callError)
+
+    getAllOptions(orderType, true, true).then((options) => {
+      self.orderTypeOptions = options
+    }).catch(self.callError)
+  },
   computed: {
-    main: function () {
-      return main
-    },
     schema: function () {
       return initSchema({
         resource: main,
         columns: {
           id: {
-            header: 'id', getter: get('id'), sortRank: 1, isItemId: true,
-            listSetter: identity,
+            getter: get('id'), sortRank: 1,
             dataName: 'id', defaultData: 0,
           },
           gradeID: {
@@ -85,9 +112,6 @@ export default {
       var self = this
 
       return {
-        add: {
-          title: 'add', handler: self.onItemAdd
-        },
         modify: {
           title: 'modify', handler: self.onItemModify
         },
@@ -99,3 +123,9 @@ export default {
   },
 }
 </script>
+
+<<style lang="scss" scoped>
+.list-page > .el-row {
+  margin: 1vh 1vw;
+}
+</style>

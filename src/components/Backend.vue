@@ -16,7 +16,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-$base-color: #324157;
+$menu-color: #324157;
 
 .top-panel,
 .body-panel {
@@ -30,7 +30,7 @@ $base-color: #324157;
   align-items: center;
   justify-content: center;
 
-  height: 10vh;
+  height: 8vh;
 
   background-color: #1D8CE0;
 }
@@ -39,10 +39,8 @@ $base-color: #324157;
   display: flex;
   flex-direction: row;
 
-  top: 10vh;
-  height: 90vh;
-
-  background-color: $base-color;
+  top: 8vh;
+  height: 92vh;
 
   .menu-panel,
   .function-panel {
@@ -56,10 +54,14 @@ $base-color: #324157;
     display: inline-block;
     text-align: left;
     width: 20vw;
+
+    background-color: $menu-color;
   }
 
   .function-panel {
     width: 80vw;
+
+    margin: 1vh 1vw;
   }
 }
 </style>

@@ -3,7 +3,7 @@ import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
 import Test01 from 'containers/func/Test01'
-import Nation from 'containers/func/SS/Nation'
+import ChargeFeeConfig from 'containers/func/SS/ChargeFeeConfig'
 import BlankReport from 'components/BlankReport'
 import { queryParams } from 'utils/common'
 
@@ -23,14 +23,14 @@ var routeTree = {
     'F002005': { title: 'withdrawalApplyCheckDetail', func: BlankReport, args: { reportName: 'WithdrawalApplyCheckDetail' } },
   }},
   'D003': { title: 'systemSetting', children: {
-    'F003001': { title: 'chargeFeeConfigManage', func: Test01 },
+    'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfig },
     'F003002': { title: 'discountTypeConfigManage', func: Test01 },
     'F003003': { title: 'orderAmountLimitManage', func: Test01 },
     'F003004': { title: 'currencyManage', func: Test01 },
     'F003005': { title: 'configManage', func: Test01 },
     'F003006': { title: 'countryManage', func: Test01 },
     'F003007': { title: 'bankManage', func: Test01 },
-    'F003008': { title: 'nationManage', func: Nation },
+    'F003008': { title: 'nationManage', func: Test01 },
     'F003009': { title: 'preferCurrencyManage', func: Test01 },
     'F003010': { title: 'preferTransCountryManage', func: Test01 },
     'F003011': { title: 'productManage', func: Test01 },
