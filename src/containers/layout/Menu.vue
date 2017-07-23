@@ -1,16 +1,16 @@
 <template>
   <el-menu :default-active="getBaseIndex()" @select="handleSelect" theme="dark">
-    <el-submenu v-for="item in getBackendMenu()" :key="item.index" :index="item.index">
+    <el-submenu v-for="item in getAdminMenu()" :key="item.index" :index="item.index">
       <template slot="title">{{ item.title | t }}</template>
-        <el-menu-item v-for="subItem in getBackendMenu(item.index)" :key="subItem.index" :index="subItem.index">{{ subItem.title | t }}</el-menu-item>
+        <el-menu-item v-for="subItem in getAdminMenu(item.index)" :key="subItem.index" :index="subItem.index">{{ subItem.title | t }}</el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
-import { getBackendMenu, getBaseIndex } from 'containers/func'
+import { getAdminMenu, getBaseIndex } from 'containers/func'
 
-var backendRoot = PUBLIC_PATH + 'backend/' //dependency with App.vue's backend path and Login.vue's entry point
+var adminRoot = PUBLIC_PATH + 'admin/' //dependency with App.vue's admin path and Login.vue's entry point
 
 export default {
   name: 'Menu',
@@ -20,10 +20,10 @@ export default {
     }
   },
   methods: {
-    getBackendMenu,
+    getAdminMenu,
     getBaseIndex,
     handleSelect(key, keyPath) {
-      this.$router.push(backendRoot + keyPath.join('/'));
+      this.$router.push(adminRoot + keyPath.join('/'));
     },
   }
 }

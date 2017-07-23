@@ -93,7 +93,7 @@ export function getBaseRoute() {
   return baseIndexMapper[user.roleID].join('/')
 }
 
-export function getBackendMenu(index) {
+export function getAdminMenu(index) {
   var menu = getUserMenu();
 
   if (index) {
@@ -107,7 +107,7 @@ export function getBackendMenu(index) {
   }
 }
 
-export function getBackendRoutes() {
+export function getAdminRoutes() {
   var result = [];
 
   R.forEach((pair) => {

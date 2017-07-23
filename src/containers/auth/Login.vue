@@ -1,16 +1,23 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" :ref="ruleFormName">
-    <el-form-item :label="'userName' | t" prop="userName">
-      <el-input type="text" v-model="ruleForm.userName"></el-input>
-    </el-form-item>
-    <el-form-item :label="'password' | t" prop="password">
-      <el-input type="password" v-model="ruleForm.password"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormName)">{{ 'logIn' | t }}</el-button>
-      <el-button @click="resetForm(ruleFormName)">{{ 'reset' | t }}</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="login-page">
+    <el-card class="login-card">
+      <div slot="header">
+        <div class="header">{{ projectName }} Backend</div>
+      </div>
+      <el-form :model="ruleForm" :rules="rules" :ref="ruleFormName">
+        <el-form-item :label="'userName' | t" prop="userName">
+          <el-input type="text" v-model="ruleForm.userName" :autofocus="true" size="small"></el-input>
+        </el-form-item>
+        <el-form-item :label="'password' | t" prop="password">
+          <el-input type="password" v-model="ruleForm.password" size="small"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="submitForm(ruleFormName)" type="primary" size="small">{{ 'logIn' | t }}</el-button>
+          <el-button @click="resetForm(ruleFormName)" size="small">{{ 'reset' | t }}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -47,7 +54,10 @@ export default {
   computed: {
     ruleFormName: function () {
       return 'ruleForm'
-    }
+    },
+    projectName: function () {
+      return PROJECT_NAME
+    },
   },
   methods: {
     submitForm(name) {
@@ -76,7 +86,7 @@ export default {
         }).then((menu) => {
           setUserMenu(menu)
 
-          self.$router.push(PUBLIC_PATH + 'backend/' + getBaseRoute()); //dependency with App.vue's backend path and Menu.vue's backendRoot
+          self.$router.push(PUBLIC_PATH + 'admin/' + getBaseRoute()); //dependency with App.vue's admin path and Menu.vue's adminRoot
         }).catch((error) => {
           self.$message.error(error.message)
         })
@@ -88,3 +98,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.login-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-color: #1F2D3D;
+}
+
+.login-card {
+  margin: 20vh 30vw;
+
+  background-color: #F9FAFC;
+
+  .header {
+    text-align: center;
+  }
+}
+</style>

@@ -61,6 +61,7 @@ module.exports = {
     new webpack.DefinePlugin({
       API_HOST: "'http://localhost:8005'",
       REPORT_SERVICE_HOST: "'http://192.168.51.150:8087/ReportServer?%2fSIT_TradingP_Backend'",
+      PROJECT_NAME: "'EZCOIN2U'",
       PUBLIC_PATH: "'/'",
     }),
     new webpack.NamedModulesPlugin()
