@@ -2,24 +2,25 @@ import R from 'ramda'
 import { getUserInfo, getUserMenu } from 'store'
 import Top from 'containers/layout/Top'
 import Menu from 'containers/layout/Menu'
-import BlankReport from 'components/BlankReport'
 import { queryParams } from 'utils/common'
 
-import Test01 from 'containers/func/Test01'
-import ChargeFeeConfig from 'containers/func/SS/ChargeFeeConfig'
-import DiscountTypeConfig from 'containers/func/SS/DiscountTypeConfig'
-import Config from 'containers/func/SS/Config'
-import OrderAmountLimit from 'containers/func/SS/OrderAmountLimit'
-import Bank from 'containers/func/CS/Bank'
-import BillboardType from 'containers/func/CS/BillboardType'
-import Country from 'containers/func/CS/Country'
-import Currency from 'containers/func/CS/Currency'
-import Nation from 'containers/func/CS/Nation'
-import PreferCurrency from 'containers/func/CS/PreferCurrency'
-import PreferTransCountry from 'containers/func/CS/PreferTransCountry'
-import Production from 'containers/func/PM/Production'
-import Billboard from 'containers/func/MC/Billboard'
-import Notice from 'containers/func/MC/Notice'
+import Test01Page from 'containers/func/Test01'
+import BlankReportPage from 'components/BlankReport'
+import ChargeFeeConfigPage from 'containers/func/SS/ChargeFeeConfig'
+import DiscountTypeConfigPage from 'containers/func/SS/DiscountTypeConfig'
+import ConfigPage from 'containers/func/SS/Config'
+import OrderAmountLimitPage from 'containers/func/SS/OrderAmountLimit'
+import BankPage from 'containers/func/CS/Bank'
+import BillboardTypePage from 'containers/func/CS/BillboardType'
+import CountryPage from 'containers/func/CS/Country'
+import CurrencyPage from 'containers/func/CS/Currency'
+import NationPage from 'containers/func/CS/Nation'
+import PreferCurrencyPage from 'containers/func/CS/PreferCurrency'
+import PreferTransCountryPage from 'containers/func/CS/PreferTransCountry'
+import ProductionPage from 'containers/func/PM/Production'
+import BillboardPage from 'containers/func/MC/Billboard'
+import NoticePage from 'containers/func/MC/Notice'
+import MenuPage from 'containers/func/BM/Menu'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -30,39 +31,39 @@ var routeTree = {
   //   'F001005': { title: 'pendingOrderCancel', func: Test01 },
   // }},
   'D002': { title: 'reportManage', children: {
-    'F002001': { title: 'orderReport', func: BlankReport, args: { reportName: 'OrderReport' } },
-    'F002002': { title: 'depositReport', func: BlankReport, args: { reportName: 'DepositReport' } },
-    'F002003': { title: 'withdrawalReport', func: BlankReport, args: { reportName: 'WithdrawalReport' } },
-    'F002004': { title: 'withdrawalApplyCheckList', func: BlankReport, args: { reportName: 'WithdrawalApplyCheckList' } },
-    'F002005': { title: 'withdrawalApplyCheckDetail', func: BlankReport, args: { reportName: 'WithdrawalApplyCheckDetail' } },
+    'F002001': { title: 'orderReport', func: BlankReportPage, args: { reportName: 'OrderReport' } },
+    'F002002': { title: 'depositReport', func: BlankReportPage, args: { reportName: 'DepositReport' } },
+    'F002003': { title: 'withdrawalReport', func: BlankReportPage, args: { reportName: 'WithdrawalReport' } },
+    'F002004': { title: 'withdrawalApplyCheckList', func: BlankReportPage, args: { reportName: 'WithdrawalApplyCheckList' } },
+    'F002005': { title: 'withdrawalApplyCheckDetail', func: BlankReportPage, args: { reportName: 'WithdrawalApplyCheckDetail' } },
   }},
   'D003': { title: 'systemSetting', children: {
-    'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfig },
-    'F003002': { title: 'discountTypeConfigManage', func: DiscountTypeConfig },
-    'F003003': { title: 'orderAmountLimitManage', func: OrderAmountLimit },
-    'F003004': { title: 'currencyManage', func: Currency },
-    'F003005': { title: 'configManage', func: Config },
-    'F003006': { title: 'countryManage', func: Country },
-    'F003007': { title: 'bankManage', func: Bank },
-    'F003008': { title: 'nationManage', func: Nation },
-    'F003009': { title: 'preferCurrencyManage', func: PreferCurrency },
-    'F003010': { title: 'preferTransCountryManage', func: PreferTransCountry },
-    'F003011': { title: 'productManage', func: Production },
+    'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfigPage },
+    'F003002': { title: 'discountTypeConfigManage', func: DiscountTypeConfigPage },
+    'F003003': { title: 'orderAmountLimitManage', func: OrderAmountLimitPage },
+    'F003004': { title: 'currencyManage', func: CurrencyPage },
+    'F003005': { title: 'configManage', func: ConfigPage },
+    'F003006': { title: 'countryManage', func: CountryPage },
+    'F003007': { title: 'bankManage', func: BankPage },
+    'F003008': { title: 'nationManage', func: NationPage },
+    'F003009': { title: 'preferCurrencyManage', func: PreferCurrencyPage },
+    'F003010': { title: 'preferTransCountryManage', func: PreferTransCountryPage },
+    'F003011': { title: 'productManage', func: ProductionPage },
   }},
   'D004': { title: 'informationCenter', children: {
-    'F004001': { title: 'billboardManage', func: Billboard },
-    'F004002': { title: 'noticeManage', func: Notice },
+    'F004001': { title: 'billboardManage', func: BillboardPage },
+    'F004002': { title: 'noticeManage', func: NoticePage },
   }},
   'D005': { title: 'backendManage', children: {
-    'F005001': { title: 'memberManage', func: Test01 },
-    'F005002': { title: 'memberAssetManage', func: Test01 },
-    'F005003': { title: 'memberBankAccountManage', func: Test01 },
-    'F005004': { title: 'roleManage', func: Test01 },
-    'F005005': { title: 'userManage', func: Test01 },
-    'F005006': { title: 'menuManage', func: Test01 },
+    'F005001': { title: 'memberManage', func: Test01Page },
+    'F005002': { title: 'memberAssetManage', func: Test01Page },
+    'F005003': { title: 'memberBankAccountManage', func: Test01Page },
+    'F005004': { title: 'roleManage', func: Test01Page },
+    'F005005': { title: 'userManage', func: Test01Page },
+    'F005006': { title: 'menuManage', func: MenuPage },
   }},
   'D006': { title: 'commonSetting', children: {
-    'F006001': { title: 'billboardTypeManage', func: BillboardType },
+    'F006001': { title: 'billboardTypeManage', func: BillboardTypePage },
   }},
 }
 

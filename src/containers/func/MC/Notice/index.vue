@@ -16,7 +16,7 @@
 import { identity, get, toMark } from 'utils/common'
 import { t } from 'utils/translater'
 import { toLocalDate } from 'utils/date'
-import { resources, getAllOptions, getOptionDesc } from 'apis'
+import { resources, getAllOptions, getOptionDescByValue } from 'apis'
 import { listMixin, initSchema } from 'containers/func/listHelper'
 import MainEditor from './MainEditor'
 
@@ -53,7 +53,7 @@ export default {
           },
           noticeType: {
             header: 'noticeType', getter: get('noticeType'), sortRank: 1,
-            listSetter: (value) => (getOptionDesc(self.noticeTypeOptions, value)),
+            listSetter: (value) => (getOptionDescByValue(self.noticeTypeOptions, value)),
             dataName: 'noticeType', defaultData: 'message',
           },
           isWEB: {

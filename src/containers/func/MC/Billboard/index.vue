@@ -16,7 +16,7 @@
 import { identity, get, toMark } from 'utils/common'
 import { t } from 'utils/translater'
 import { toLocalDate } from 'utils/date'
-import { resources, getAllOptions, getOptionDesc } from 'apis'
+import { resources, getAllOptions, getOptionDescByValue } from 'apis'
 import { listMixin, initSchema } from 'containers/func/listHelper'
 import MainEditor from './MainEditor'
 
@@ -53,7 +53,7 @@ export default {
           },
           billBoardType: {
             header: 'billBoardType', getter: get('billBoardType'), sortRank: 1,
-            listSetter: (value) => (getOptionDesc(self.billboardTypeOptions, value)),
+            listSetter: (value) => (getOptionDescByValue(self.billboardTypeOptions, value)),
             dataName: 'billBoardType', defaultData: 'news',
           },
           beginDate: {

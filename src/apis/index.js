@@ -193,10 +193,18 @@ export function getAllOptions(resource, hasPromptOption, needTranslation) {
   })
 }
 
-export function getOptionDesc(options, value) {
+export function getOptionDescByValue(options, value) {
   if (!options || options.length <=0 || !value) return '';
 
   var selectedOption = R.find((c) => { return c.value === value }, options)
 
   return selectedOption ? selectedOption.text : value
+}
+
+export function getOptionDescById(options, id) {
+  if (!options || options.length <=0 || id < 0) return '';
+
+  var selectedOption = R.find((c) => { return c.id === id }, options)
+
+  return selectedOption ? selectedOption.text : id
 }

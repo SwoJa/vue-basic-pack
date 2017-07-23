@@ -330,6 +330,7 @@ var mapper = {
   roleManage: '角色管理',
   menuManage: '选单管理',
   url: '链结',
+  parent: '上层',
   parentID: '上层编号',
   menuType: '选单类别',
   menuType_1: '根目錄',
