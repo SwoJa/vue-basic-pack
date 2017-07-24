@@ -56,7 +56,7 @@ var getData = R.path(['data', 'data'])
 function parseResponse(response) {
   if (response.status === 500) throw new Error('Backend Error') //TODO:translation
   
-  if (response.statusText === 'OK') return response.status !== 204 ? (getRowsNTotal(response) || getData(response)) : true
+  if (response.statusText === 'OK') return response.status !== 204 ? (getRowsNTotal(response) || getData(response) || response.data) : true
   
   throw new Error(response.data.message)
 }

@@ -2,14 +2,9 @@
   <el-dialog :title="title | t" :visible="showEditor"
     :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
     <el-form :model="form" label-width="120px">
-      <el-form-item :label="'country' | t">
-        <el-select v-model="form.countryID" :disabled="!isAdding">
-          <el-option v-for="option in countryOptions" :key="'country' + option.id" :label="option.text" :value="option.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="'currencyID' | t">
-        <el-select v-model="form.currencyID" :disabled="!isAdding">
-          <el-option v-for="option in currencyOptions" :key="'currencyID' + option.id" :label="option.text" :value="option.value"></el-option>
+      <el-form-item :label="'product' | t">
+        <el-select v-model="form.productID" :disabled="!isAdding">
+          <el-option v-for="option in productOptions" :key="'product' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="'lowestBid' | t">
@@ -45,11 +40,8 @@ export default {
   name: 'MainEditor',
   mixins: [listEditorMixin],
   computed: {
-    countryOptions: function() {
-      return this.caller.countryOptions
-    },
-    currencyOptions: function() {
-      return this.caller.currencyOptions
+    productOptions: function() {
+      return this.caller.productOptions
     },
   },
 }

@@ -19,8 +19,7 @@ import { resources, getAllOptions } from 'apis'
 import { listMixin, initSchema } from 'containers/func/listHelper'
 import MainEditor from './MainEditor'
 
-var main = resources.orderAmountLimit,
-  country = resources.country, currency = resources.currency
+var main = resources.orderAmountLimit, product = resources.product
 
 export default {
   name: 'OrderAmountLimit',
@@ -30,19 +29,14 @@ export default {
   },
   data() {
     return {
-      countryOptions: [],
-      currencyOptions: [],
+      productOptions: [],
     }
   },
   created() {
     var self = this
 
-    getAllOptions(country, true, true).then((options) => {
-      self.countryOptions = options
-    }).catch(self.callError)
-
-    getAllOptions(currency, true, true).then((options) => {
-      self.currencyOptions = options
+    getAllOptions(product, true, true).then((options) => {
+      self.productOptions = options
     }).catch(self.callError)
   },
   computed: {
@@ -51,17 +45,13 @@ export default {
         resource: main,
         columns: {
           id: {
-            getter: (value) => (value.countryID + ',' + value.currencyID), sortRank: 1,
+            getter: get('id'), sortRank: 1,
+            dataName: 'id', defaultData: 0
           },
-          countryID: {
-            header: 'country', getter: get('countryID'), sortRank: 1,
+          productID: {
+            header: 'product', getter: get('productID'), sortRank: 1,
             listSetter: identity,
-            dataName: 'countryID', defaultData: 'CN',
-          },
-          currencyID: {
-            header: 'currency', getter: get('currencyID'), sortRank: 1,
-            listSetter: identity,
-            dataName: 'currencyID', defaultData: 'RMB',
+            dataName: 'productID', defaultData: 'BTC',
           },
           lowestBid: {
             header: 'lowestBid', getter: get('lowestBid'), sortRank: 1,

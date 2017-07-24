@@ -1,6 +1,35 @@
 var path = require('path')
 var webpack = require('webpack')
 
+var projectName = quoted('EZCOIN2U')
+
+var envs = {
+  development: {
+    API_HOST: quoted('http://localhost:8005'),
+    REPORT_SERVICE_HOST: quoted('http://report.git4u.net:8087/ReportServer?%2fSIT_TradingP_Backend'),
+    PROJECT_NAME: projectName,
+    PUBLIC_PATH: quoted('/'),
+  },
+  sit: {
+    API_HOST: quoted('http://api-trading.git4u.net:63333'),
+    REPORT_SERVICE_HOST: quoted('http://report.git4u.net:8087/ReportServer?%2fSIT_TradingP_Backend'),
+    PROJECT_NAME: projectName,
+    PUBLIC_PATH: quoted('/'),
+  },
+  uat: {
+    API_HOST: quoted('http://192.168.51.153:63333'),
+    REPORT_SERVICE_HOST: quoted('http://report.git4u.net:8087/ReportServer?%2fUAT_TradingP_Backend'),
+    PROJECT_NAME: projectName,
+    PUBLIC_PATH: quoted('/'),
+  },
+  production: {
+    API_HOST: quoted('https://10.0.5.17:8080'),
+    REPORT_SERVICE_HOST: quoted('http://125.227.132.132:8087/ReportServer?%2fTradingP_Backend'),
+    PROJECT_NAME: projectName,
+    PUBLIC_PATH: quoted('/'),
+  },
+}
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -58,12 +87,7 @@ module.exports = {
   },
   devtool: '#eval-source-map',
   plugins: [
-    new webpack.DefinePlugin({
-      API_HOST: "'http://localhost:8005'",
-      REPORT_SERVICE_HOST: "'http://192.168.51.150:8087/ReportServer?%2fSIT_TradingP_Backend'",
-      PROJECT_NAME: "'EZCOIN2U'",
-      PUBLIC_PATH: "'/'",
-    }),
+    new webpack.DefinePlugin(envs[process.env.NODE_ENV]),
     new webpack.NamedModulesPlugin()
   ]
 }
@@ -86,4 +110,8 @@ if (process.env.NODE_ENV === 'production') {
       minimize: true
     })
   ])
+}
+
+function quoted(str) {
+  return ["\'", str, "\'"].join('')
 }
