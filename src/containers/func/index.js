@@ -22,6 +22,9 @@ import BillboardPage from 'containers/func/MC/Billboard'
 import NoticePage from 'containers/func/MC/Notice'
 import MenuPage from 'containers/func/BM/Menu'
 import RolePage from 'containers/func/BM/Role'
+import MemberPage from 'containers/func/MB/Member'
+import MemberAssetPage from 'containers/func/MB/MemberAsset'
+import MemberBankAccountPage from 'containers/func/MB/MemberBankAccount'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -56,9 +59,9 @@ var routeTree = {
     'F004002': { title: 'noticeManage', func: NoticePage },
   }},
   'D005': { title: 'backendManage', children: {
-    'F005001': { title: 'memberManage', func: Test01Page },
-    'F005002': { title: 'memberAssetManage', func: Test01Page },
-    'F005003': { title: 'memberBankAccountManage', func: Test01Page },
+    'F005001': { title: 'memberManage', func: MemberPage },
+    'F005002': { title: 'memberAssetManage', func: MemberAssetPage },
+    'F005003': { title: 'memberBankAccountManage', func: MemberBankAccountPage },
     'F005004': { title: 'roleManage', func: RolePage },
     'F005005': { title: 'userManage', func: Test01Page },
     'F005006': { title: 'menuManage', func: MenuPage },

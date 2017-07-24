@@ -9,7 +9,7 @@
         <el-input v-model="form.roleName"></el-input>
       </el-form-item>
       <el-form-item :label="'status' | t">
-        <el-select v-model="form.status">
+        <el-select v-model="form.roleStatus">
           <el-option v-for="option in mainStatusOptions" :key="'status' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
