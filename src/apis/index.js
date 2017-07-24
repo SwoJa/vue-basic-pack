@@ -109,53 +109,25 @@ var fakedNoticeTypeList = [
 ];
 
 export function create(url, data) {
-  var user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
-
-  return postJSON(url, data, options)
+  return postJSON(url, data, genAuthorizationHeaders())
 }
 
 export function update(url, data) {
-  var user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
-
-  return putJSON(url, data, options)
+  return putJSON(url, data, genAuthorizationHeaders())
 }
 
 export function updateForm(url, data) {
-  var user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
-
-  return putForm(url, data, options)
+  return putForm(url, data, genAuthorizationHeaders())
 }
 
 export function remove(url) {
-  var user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
-
-  return removeJSON(url, options)
+  return removeJSON(url, genAuthorizationHeaders())
 }
 
 export function getList(resource, pageNow = 1, pageSize = 10) {
-  var url = API_HOST + '/' + resource.resourceName, user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
+  var url = API_HOST + '/' + resource.resourceName
 
-  return getJSON(url + '?pageNow=' + pageNow + '&pageSize=' + pageSize, options)
+  return getJSON(url + '?pageNow=' + pageNow + '&pageSize=' + pageSize, genAuthorizationHeaders())
 }
 
 export function getAll(resource, id) {
@@ -169,17 +141,23 @@ export function getAll(resource, id) {
     return Promise.resolve(fakedNoticeTypeList)
   }
 
-  var url = API_HOST + '/' + resource.resourceName, user = getUserInfo(), options = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
-    }
-  }
+  var url = API_HOST + '/' + resource.resourceName
 
   if (id) {
     url += '/' + id
   }
 
-  return getJSON(url + '?pageNow=1&pageSize=99999999', options)
+  return getJSON(url + '?pageNow=1&pageSize=99999999', genAuthorizationHeaders())
+}
+
+function genAuthorizationHeaders() {
+  var user = getUserInfo(), options = {
+    headers: {
+      Authorization: 'Bearer ' + user.token,
+    }
+  }
+
+  return options
 }
 
 export function getAllOptions(resource, hasPromptOption, needTranslation) {

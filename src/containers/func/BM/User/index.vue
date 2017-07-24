@@ -27,7 +27,7 @@ var main = resources.user, role = resources.role
 var passwordEditorName = 'PasswordEditor'
 
 export default {
-  name: 'Role',
+  name: 'User',
   mixins: [listMixin],
   components: {
     MainEditor,

@@ -41,6 +41,8 @@ var routeTree = {
     'F002003': { title: 'withdrawalReport', func: BlankReportPage, args: { reportName: 'WithdrawalReport' } },
     'F002004': { title: 'withdrawalApplyCheckList', func: BlankReportPage, args: { reportName: 'WithdrawalApplyCheckList' } },
     'F002005': { title: 'withdrawalApplyCheckDetail', func: BlankReportPage, args: { reportName: 'WithdrawalApplyCheckDetail' } },
+    'F002006': { title: 'memberAssetReport', func: BlankReportPage, args: { reportName: 'MemberAsset' } },
+    'F002007': { title: 'memberAssetDetailReport', func: BlankReportPage, args: { reportName: 'MemberAssetDetail' } },
   }},
   'D003': { title: 'systemSetting', children: {
     'F003001': { title: 'chargeFeeConfigManage', func: ChargeFeeConfigPage },
