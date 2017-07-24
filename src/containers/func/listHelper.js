@@ -4,7 +4,7 @@ import { t } from 'utils/translater'
 import { getList, create, update, remove } from 'apis'
 import ListTable from 'components/ListTable'
 
-export var callerSelector = get('caller')
+var callerSelector = get('caller')
 var dataSelector = get('data')
 var metaDataSelector = get('metaData')
 var urlSelector = get('url')
@@ -21,11 +21,13 @@ export function initSchema(schema) {
 var hasHeader = (pairs) => (R.has('header', pairs[1]))
 var hasDataName = (pairs) => (R.has('dataName', pairs[1]))
 var toListColumn = (pairs) => ({ prop: pairs[0], label: pairs[1].header, mapper: R.compose(pairs[1].listSetter, pairs[1].getter) })
+var toDataColumn = (pairs) => ({ prop: pairs[1].dataName, mapper: pairs[1].getter })
 var toDefaultPairs = (pairs) => ([pairs[0], pairs[1].defaultData])
 
 var columns2ListColumn = R.compose(R.map(toListColumn), R.filter(hasHeader), R.toPairs)
 var columnsHasDataPairs = R.compose(R.filter(hasDataName), R.toPairs)
 var columns2DefaultItem = R.compose(R.fromPairs, R.map(toDefaultPairs), columnsHasDataPairs)
+var columns2DataColumn = R.compose(R.map(toDataColumn), R.filter(hasDataName), R.toPairs)
 
 export function getListColumns(schema) {
   if ((!schema) || (!schema.columns)) return [];
@@ -41,19 +43,27 @@ export function getListData(schema, list) {
   return R.map((row) => (R.fromPairs(R.map((column) => ([column.prop, column.mapper(row)]), listColumns))), list)
 }
 
+export function getEditingData(schema, item) {
+  if ((!schema) || (!schema.columns) || !item) return {};
+
+  var dataColumns = columns2DataColumn(schema.columns)
+
+  return R.fromPairs(R.map((column) => ([column.prop, column.mapper(item)]), dataColumns))
+}
+
 function getDefaultColumnPairs(schema) {
   if ((!schema) || (!schema.columns)) return [];
 
   return columnsHasDataPairs(schema.columns)
 }
 
-export function getDefaultItem(schema) {
+function getDefaultItem(schema) {
   if ((!schema) || (!schema.columns)) return {};
 
   return columns2DefaultItem(schema.columns);
 }
 
-export function initState(state) {
+function initState(state) {
   return Object.assign({
     editingCondition: {},
     condition: {},
@@ -80,7 +90,7 @@ export function getOPs(op) {
   return R.values(op)
 }
 
-export function mainQueryInit(params) {
+function mainQueryInit(params) {
   var self = callerSelector(params)
 
   self.condition = {}
@@ -89,7 +99,7 @@ export function mainQueryInit(params) {
   return true
 }
 
-export function mainQueryConditionChange(params, data) {
+function mainQueryConditionChange(params, data) {
   var self = callerSelector(params), editingCondition = self.editingCondition,
     newCondition = Object.assign({}, editingCondition, data)
 
@@ -119,6 +129,7 @@ var mainStatusOptions = [
   { id: 1, text: t('mainStatus_Invalid'), value: 'Invalid'},
 ];
 
+export var mainEditorName = 'MainEditor'
 
 export function mainEditStart(params, item, meta) {
   var self = callerSelector(params)
@@ -132,7 +143,7 @@ export function mainEditStart(params, item, meta) {
   return true
 }
 
-export function mainEditEnd(params) {
+function mainEditEnd(params) {
   var self = callerSelector(params)
 
   self.showEditor = false
@@ -141,7 +152,7 @@ export function mainEditEnd(params) {
   return true;
 }
 
-export function mainItemRemove(params, data) {
+function mainItemRemove(params, data) {
   var self = callerSelector(params)
 
   params.url = getResourceURL(self.schema.resource, data, false)
@@ -149,7 +160,7 @@ export function mainItemRemove(params, data) {
   return mainRemove(params)
 }
 
-export function editorSubmitClick(params, data) {
+function editorSubmitClick(params, data) {
   var self = callerSelector(params)
 
   params.data = data
@@ -199,10 +210,6 @@ function mainCallAPI(params, callee) {
   return callee(urlSelector(params), data).then(function (result) {
     successHelper(params)
 
-    self.showEditor = false
-    self.isAdding = false
-    self.isModifying = isModifying
-    self.metaData = {}
     self.one = result
 
     return true
@@ -215,7 +222,7 @@ function mainCallAPI(params, callee) {
   })
 }
 
-function processingHelper(params) {
+export function processingHelper(params) {
   var self = callerSelector(params)
 
   self.waiting = true
@@ -224,8 +231,13 @@ function processingHelper(params) {
   return true
 }
 
-function successHelper(params) {
+export function successHelper(params) {
   var self = callerSelector(params)
+
+  self.showEditor = false
+  self.isAdding = false
+  self.isModifying = false
+  self.metaData = {}
 
   self.waiting = false
   self.isDirty = true
@@ -233,7 +245,7 @@ function successHelper(params) {
   return true
 }
 
-function failedHelper(params) {
+export function failedHelper(params) {
   var self = callerSelector(params)
 
   self.waiting = false
@@ -249,7 +261,10 @@ export var listMixin = {
   computed: {
     listHeight: function() {
       return window && (window.innerHeight - 180) || 480
-    },    
+    },
+    mainEditorName: function() {
+      return mainEditorName
+    },   
   },
   mounted: function () {
     this.reloadList()
@@ -299,12 +314,18 @@ export var listMixin = {
     onItemAdd() {
       var self = this
 
-      return mainEditStart(self.getParams(), getDefaultItem(self.schema), { isAdding: true })
+      return mainEditStart(self.getParams(), getDefaultItem(self.schema), {
+        isAdding: true,
+        showingModalName: mainEditorName,
+      })
     },
     onItemModify(index) {
       var self = this
 
-      return mainEditStart(self.getParams(), self.list[index], { isAdding: false })
+      return mainEditStart(self.getParams(), getEditingData(self.schema, self.list[index]), {
+        isAdding: false,
+        showingModalName: mainEditorName,
+      })
     },
     onItemRemove(index) {
       var self = this

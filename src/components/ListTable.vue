@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import R from 'ramda'
 import { getOPs, getListColumns, getListData } from 'containers/func/listHelper'
 
 export default {
@@ -34,7 +35,13 @@ export default {
       return getOPs(this.operation)
     },
     opsWidth: function() {
-      return this.ops && (28 + 54 * this.ops.length) || 0
+      var self = this, sizes = 0
+
+      if (!self.ops) return 0;
+
+      sizes = R.reduce((seed, op) => (seed + (op.size || 2)), 0, self.ops)
+
+      return 28 + 27 * sizes
     },
     listColumns: function() {
       return getListColumns(this.schema)

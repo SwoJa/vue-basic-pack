@@ -21,6 +21,7 @@ import ProductionPage from 'containers/func/PM/Production'
 import BillboardPage from 'containers/func/MC/Billboard'
 import NoticePage from 'containers/func/MC/Notice'
 import MenuPage from 'containers/func/BM/Menu'
+import RolePage from 'containers/func/BM/Role'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -58,7 +59,7 @@ var routeTree = {
     'F005001': { title: 'memberManage', func: Test01Page },
     'F005002': { title: 'memberAssetManage', func: Test01Page },
     'F005003': { title: 'memberBankAccountManage', func: Test01Page },
-    'F005004': { title: 'roleManage', func: Test01Page },
+    'F005004': { title: 'roleManage', func: RolePage },
     'F005005': { title: 'userManage', func: Test01Page },
     'F005006': { title: 'menuManage', func: MenuPage },
   }},
