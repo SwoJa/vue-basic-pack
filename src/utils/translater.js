@@ -769,4 +769,8 @@ var mapper = {
   highestUnitBidPercentage: '最高单价百分比',
 
   operation: '操作',
+  modifyPassword: '修改密码',
+  passwordType: '密码类别',
+  passwordType_login: '登入密码',
+  passwordType_operation: '操作密码',
 };

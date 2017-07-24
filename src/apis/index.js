@@ -1,5 +1,5 @@
 import R from 'ramda'
-import { getJSON, postJSON, putJSON, removeJSON } from 'apis/common'
+import { getJSON, postJSON, putJSON, removeJSON, putForm } from 'apis/common'
 import { t } from 'utils/translater'
 import { get, optionMap } from 'utils/common'
 import { getUserInfo } from 'store'
@@ -126,6 +126,16 @@ export function update(url, data) {
   }
 
   return putJSON(url, data, options)
+}
+
+export function updateForm(url, data) {
+  var user = getUserInfo(), options = {
+    headers: {
+      Authorization: 'Bearer ' + user.token
+    }
+  }
+
+  return putForm(url, data, options)
 }
 
 export function remove(url) {

@@ -1,7 +1,7 @@
 <template>
   <div class="list-page">
     <el-row>
-      <el-col :span="6">{{ 'roleManage' | t }}</el-col>
+      <el-col :span="6">{{ 'userManage' | t }}</el-col>
       <el-col :span="1" :offset="17">
         <el-button @click="onItemAdd()" size="small">{{ 'add' | t}}</el-button>
       </el-col>
@@ -9,7 +9,7 @@
     <ListTable :list="list" :schema="schema" :listHeight="listHeight" :operation="operation" :currentPage="currentPage" :pageSize="pageSize" :total="total" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange">
     </ListTable>
     <MainEditor :showEditor="showEditor && metaData.showingModalName === mainEditorName" :initialData="getInitialData(getParams())" :params="getParams()"></MainEditor>
-    <MenuEditor :showEditor="showEditor && metaData.showingModalName === menuEditorName" :initialData="getInitialData(getParams())" :params="getParams()"></MenuEditor>
+    <PasswordEditor :showEditor="showEditor && metaData.showingModalName === passwordEditorName" :initialData="getInitialData(getParams())" :params="getParams()"></PasswordEditor>
   </div>
 </template>
 
@@ -17,33 +17,33 @@
 import { identity, get } from 'utils/common'
 import { toLocal12Time } from 'utils/date'
 import { t } from 'utils/translater'
-import { resources, getAll, getAllOptions } from 'apis'
+import { resources, getAllOptions } from 'apis'
 import { listMixin, initSchema, mainEditStart, getEditingData } from 'containers/func/listHelper'
 import MainEditor from './MainEditor'
-import MenuEditor from './MenuEditor'
+import PasswordEditor from './PasswordEditor'
 
-var main = resources.role, menu = resources.menu, roleMenu = resources.roleMenu
+var main = resources.user, role = resources.role
 
-var menuEditorName = 'MenuEditor'
+var passwordEditorName = 'PasswordEditor'
 
 export default {
   name: 'Role',
   mixins: [listMixin],
   components: {
     MainEditor,
-    MenuEditor
+    PasswordEditor
   },
   data() {
     return {
       menu: [],
-      menuOptions: [],
+      roleOptions: [],
     }
   },
   created() {
     var self = this
 
-    getAllOptions(menu, true, true).then((options) => {
-      self.menuOptions = options
+    getAllOptions(role, true, true).then((options) => {
+      self.roleOptions = options
     }).catch(self.callError)
   },
   computed: {
@@ -51,32 +51,32 @@ export default {
       return initSchema({
         resource: main,
         columns: {
-          id: {
-            header: 'id', getter: get('id'), sortRank: 1,
+          userID: {
+            header: 'userID', getter: get('userID'), sortRank: 1,
             listSetter: identity,
-            dataName: 'id', defaultData: '',
+            dataName: 'userID', defaultData: '',
           },
-          roleID: {
-            getter: get('id'), sortRank: 1,
-            dataName: 'roleID', defaultData: '',
+          userName: {
+            header: 'userName', getter: get('userName'), sortRank: 1,
+            listSetter: identity,
+            dataName: 'userName', defaultData: '',
+          },
+          userStatus: {
+            header: 'userStatus', getter: get('userStatus'), sortRank: 1,
+            listSetter: (value) => (t('mainStatus_' + value)),
+            dataName: 'userStatus', defaultData: 'Active',
           },
           roleName: {
-            header: 'roleName', getter: get('roleName'), sortRank: 1,
+            header: 'roleName', getter: get('roleName'),  sortRank: 1,
             listSetter: identity,
-            dataName: 'roleName', defaultData: '',
-          },
-          roleStatus: {
-            header: 'roleStatus', getter: get('roleStatus'), sortRank: 1,
-            listSetter: (value) => (t('mainStatus_' + value)),
-            dataName: 'roleStatus', defaultData: 'Active',
           },
           modifyDate: {
             header: 'modifyDate', getter: get('modifyDate'), sortRank: 1,
             listSetter: (value) => (toLocal12Time(value)),
           },
-          modifyID: {
-            header: 'modifyID', getter: get('modifyID'),  sortRank: 1,
-            listSetter: identity,
+          roleID: {
+            getter: get('roleID'), sortRank: 1,
+            dataName: 'roleID', defaultData: 'normal',
           },
           remark: {
             header: 'remark', getter: get('remark'), sortRank: 1,
@@ -93,27 +93,26 @@ export default {
         modify: {
           title: 'modify', handler: self.onItemModify
         },
-        modifyMenu: {
-          title: 'modifyMenu', handler: self.onItemMenuModify, size: 3
+        modifyPassword: {
+          title: 'modifyPassword', handler: self.onItemPasswordModify, size: 3
         },
       }
     },
-    menuEditorName: function() {
-      return menuEditorName
+    passwordEditorName: function() {
+      return passwordEditorName
     },
   },
   methods: {
-    onItemMenuModify: function(index) {
-      var self = this
+    onItemPasswordModify: function(index) {
+      var self = this, initialData = self.list[index]
 
-      getAll(roleMenu, (self.list[index]).roleID).then((result) => {
-        var initialData = getEditingData(self.schema, self.list[index])
-        initialData.menu = result
+      initialData.passwordType = 'login'
+      initialData.newPassword = ''
+      initialData.confirmPassword = ''
 
-        return mainEditStart(self.getParams(), initialData, {
-          isAdding: false,
-          showingModalName: menuEditorName,
-        })
+      mainEditStart(self.getParams(), initialData, {
+        isAdding: false,
+        showingModalName: passwordEditorName,
       })
     }
   }

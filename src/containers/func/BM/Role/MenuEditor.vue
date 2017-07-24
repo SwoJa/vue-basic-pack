@@ -65,7 +65,7 @@ export default {
         self.callback = error
 
         return false
-      });
+      })
     },
     handleAdd: function() {
       this.form.menu.push(Object.assign({}, defaultItem));

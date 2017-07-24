@@ -22,6 +22,7 @@ import BillboardPage from 'containers/func/MC/Billboard'
 import NoticePage from 'containers/func/MC/Notice'
 import MenuPage from 'containers/func/BM/Menu'
 import RolePage from 'containers/func/BM/Role'
+import UserPage from 'containers/func/BM/User'
 import MemberPage from 'containers/func/MB/Member'
 import MemberAssetPage from 'containers/func/MB/MemberAsset'
 import MemberBankAccountPage from 'containers/func/MB/MemberBankAccount'
@@ -63,7 +64,7 @@ var routeTree = {
     'F005002': { title: 'memberAssetManage', func: MemberAssetPage },
     'F005003': { title: 'memberBankAccountManage', func: MemberBankAccountPage },
     'F005004': { title: 'roleManage', func: RolePage },
-    'F005005': { title: 'userManage', func: Test01Page },
+    'F005005': { title: 'userManage', func: UserPage },
     'F005006': { title: 'menuManage', func: MenuPage },
   }},
   'D006': { title: 'commonSetting', children: {
