@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="'modifyMenu' | t" :visible="showEditor"
+  <el-dialog :title="'modifyPassword' | t" :visible="showEditor"
     :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
     <el-form :model="form" label-width="120px">
       <el-form-item :label="'passwordType' | t">

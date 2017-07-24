@@ -773,6 +773,7 @@ var mapper = {
   passwordType: '密码类别',
   passwordType_login: '登入密码',
   passwordType_operation: '操作密码',
+  originPassword: '原密码',
 
   memberAssetReport: '会员资产查询',
   memberAssetDetailReport: '会员资产细项查询',
