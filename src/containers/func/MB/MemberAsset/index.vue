@@ -4,6 +4,9 @@
       <el-col :span="6">{{ 'memberAssetManage' | t }}</el-col>
     </el-row>
     <ListTable :list="list" :schema="schema" :listHeight="listHeight" :operation="operation" :currentPage="currentPage" :pageSize="pageSize" :total="total" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange">
+      <div slot="outsideOperations">
+        <el-button @click="reloadList" :loading="waiting" type="primary" size="small">{{ 'search' | t}}</el-button>
+      </div>
     </ListTable>
   </div>
 </template>

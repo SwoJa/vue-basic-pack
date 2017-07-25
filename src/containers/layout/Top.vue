@@ -5,7 +5,7 @@
       {{ userInfo.userName }}
     </el-col>
     <el-col :span="3">
-      <el-button @click="handleChangePassword" type="primary" size="small">{{ 'modifyPassword' | t }}</el-button>
+      <el-button @click="handleChangePassword" size="small">{{ 'modifyPassword' | t }}</el-button>
       <el-button @click="handleLogout" :loading="waitingLogout" type="primary" size="small">{{ 'logout' | t }}</el-button>
     </el-col>
     <el-dialog :title="'modifyPassword' | t" :visible="showEditor"

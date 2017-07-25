@@ -282,11 +282,15 @@ export var listMixin = {
     reloadList() {
       var self = this
 
+      self.waiting = true
+
       self.getList(self.schema.resource, self.currentPage, self.pageSize).then((rows) => {
+        self.waiting = false
         self.isDirty = false
         self.list = rows
         self.total = rows.total
       }).catch((error) => {
+        self.waiting = false
         self.$message.error(error.message)
       })
     },
@@ -339,7 +343,7 @@ export var listMixin = {
     }
   },
   components: {
-    ListTable
+    ListTable,
   },
 }
 
@@ -356,6 +360,9 @@ export var listEditorMixin = {
     },
     isAdding: function() {
       return this.caller.isAdding
+    },
+    waiting: function() {
+      return this.caller.waiting
     },
     title: function() {
       return this.isAdding ? 'add' : 'modify'

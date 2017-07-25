@@ -17,7 +17,7 @@
         <el-input v-model="form.remark"></el-input>
       </el-form-item>
     </el-form>
-    <el-button @click="handleSubmit" type="primary">{{ 'btnConfirm' | t }}</el-button>
+    <el-button @click="handleSubmit" :loading="waiting" type="primary">{{ 'btnConfirm' | t }}</el-button>
     <el-button @click="handleCancel">{{ 'btnCancel' | t }}</el-button>
   </el-dialog>
 </template>

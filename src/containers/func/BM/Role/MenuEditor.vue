@@ -4,7 +4,7 @@
     <el-transfer v-model="form.menu" :titles="titles" class="transfer"
       :props="{ key: 'value', label: 'text' }" :data="menuOptions">
     </el-transfer>
-    <el-button @click="handleSubmit" type="primary">{{ 'btnConfirm' | t }}</el-button>
+    <el-button @click="handleSubmit" :loading="waiting" type="primary">{{ 'btnConfirm' | t }}</el-button>
     <el-button @click="handleCancel">{{ 'btnCancel' | t }}</el-button>
   </el-dialog>
 </template>
