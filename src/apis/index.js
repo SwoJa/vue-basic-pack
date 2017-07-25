@@ -57,8 +57,7 @@ export var resources = {
     resourceName: 'CS/NoticeType', idName: 'id', descName: 'description',
   },
   orderAmountLimit: {
-    resourceName: 'SS/OrderAmountLimit', idName: '', descName: '',
-    pk: [ 'countryID', 'currencyID' ],
+    resourceName: 'SS/OrderAmountLimit', idName: 'id', descName: 'productID',
   },
   orderType: {
     resourceName: 'CS/OrderType', idName: 'id', descName: 'description',
