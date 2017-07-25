@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import R from 'ramda'
 import { identity, get } from 'utils/common'
 import { toLocal12Time } from 'utils/date'
 import { t } from 'utils/translater'
@@ -25,6 +26,7 @@ import MenuEditor from './MenuEditor'
 var main = resources.role, menu = resources.menu, roleMenu = resources.roleMenu
 
 var menuEditorName = 'MenuEditor'
+var menuID2ArrayItem = R.compose(R.toString, R.prop('menuID'))
 
 export default {
   name: 'Role',
@@ -42,7 +44,7 @@ export default {
   created() {
     var self = this
 
-    getAllOptions(menu, true, true).then((options) => {
+    getAllOptions(menu, false, true).then((options) => {
       self.menuOptions = options
     }).catch(self.callError)
   },
@@ -105,10 +107,10 @@ export default {
   methods: {
     onItemMenuModify: function(index) {
       var self = this
-
-      getAll(roleMenu, (self.list[index]).roleID).then((result) => {
+      
+      getAll(roleMenu, (self.list[index]).id).then((result) => {
         var initialData = getEditingData(self.schema, self.list[index])
-        initialData.menu = result
+        initialData.menu = R.map(menuID2ArrayItem, result) || []
 
         return mainEditStart(self.getParams(), initialData, {
           isAdding: false,
