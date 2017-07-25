@@ -10,7 +10,7 @@ var envs = {
     REPORT_SERVICE_HOST: quoted('http://report.git4u.net:8087/ReportServer?%2fSIT_TradingP_Backend'),
     PROJECT_NAME: projectName,
     PUBLIC_PATH: quoted('/'),
-    STATIC_FILE_PATH: 'http://localhost:8005/'
+    STATIC_FILE_PATH: 'http://localhost:8080/'
   },
   sit: {
     API_HOST: quoted('http://api-trading.git4u.net:63333'),
@@ -36,8 +36,6 @@ var envs = {
 }
 
 var env = envs[process.env.NODE_ENV]
-
-//  entry: './src/main.js',
 
 module.exports = {
   entry: {
@@ -106,6 +104,11 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV !== 'development') {
+  module.exports.output = {
+    path: path.resolve(__dirname, './dist'),
+    publicPath: env.STATIC_FILE_PATH,
+    filename: 'bundle.js'
+  }
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -119,6 +122,12 @@ if (process.env.NODE_ENV !== 'development') {
       },
     ]),
   ])
+} else {
+  module.exports.output = {
+    path: __dirname,
+    publicPath: env.STATIC_FILE_PATH,
+    filename: 'bundle.js'
+  }
 }
 
 if (process.env.NODE_ENV === 'production') {

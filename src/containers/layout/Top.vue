@@ -6,7 +6,7 @@
     </el-col>
     <el-col :span="3">
       <el-button @click="handleChangePassword" type="primary" size="small">{{ 'modifyPassword' | t }}</el-button>
-      <el-button @click="handleLogout" type="primary" size="small">{{ 'logout' | t }}</el-button>
+      <el-button @click="handleLogout" :loading="waitingLogout" type="primary" size="small">{{ 'logout' | t }}</el-button>
     </el-col>
     <el-dialog :title="'modifyPassword' | t" :visible="showEditor"
       :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
@@ -25,7 +25,7 @@
           <el-input type="password" v-model="form.confirmPassword"></el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="handleSubmit" type="primary">{{ 'btnConfirm' | t }}</el-button>
+      <el-button @click="handleSubmit" :loading="waitingSubmit" type="primary">{{ 'btnConfirm' | t }}</el-button>
       <el-button @click="handleCancel">{{ 'btnCancel' | t }}</el-button>
     </el-dialog>
   </el-row>
@@ -50,6 +50,8 @@ export default {
     return {
       form: Object.assign({}, defaultData),
       showEditor: false,
+      waitingLogout: false,
+      waitingSubmit: false,
     }
   },
   computed: {
@@ -61,12 +63,18 @@ export default {
     handleLogout() {
       var self = this
 
+      self.waitingLogout = true
+
       logout(self.userInfo).then(() => {
         setUserInfo({})
         setUserMenu({})
+
+        self.waitingLogout = false
         
         self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue's login path
       }).catch((error) => {
+        self.waitingLogout = false
+
         self.$message.error(error.message)
       })
     },
@@ -78,9 +86,15 @@ export default {
 
       if (editingData.newPassword !== editingData.confirmPassword) return self.$message.error(t('confirmPasswordError'));
 
+      self.waitingSubmit = true
+
       updateForm(API_HOST + '/BM/User/' + (editingData.passwordType === 'login' ? 'password' : 'operatePassword') + '?asisLoginPwd=' + editingData.asisLoginPwd + '&tobeLoginPwd=' + editingData.newPassword, {}).then((result) => {
+        self.waitingSubmit = false
+
         self.handleCancel()
       }).catch((error) => {
+        self.waitingSubmit = false
+
         self.$message.error(error.message)
       })      
     },

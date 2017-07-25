@@ -12,7 +12,7 @@
           <el-input type="password" v-model="ruleForm.password" size="small"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="submitForm(ruleFormName)" type="primary" size="small">{{ 'logIn' | t }}</el-button>
+          <el-button @click="submitForm(ruleFormName)" :loading="ruleForm.waiting" type="primary" size="small">{{ 'logIn' | t }}</el-button>
           <el-button @click="resetForm(ruleFormName)" size="small">{{ 'reset' | t }}</el-button>
         </el-form-item>
       </el-form>
@@ -40,6 +40,7 @@ export default {
       ruleForm: {
         userName: '',
         password: '',
+        waiting: false
       },
       rules: {
         userName: [
@@ -66,6 +67,8 @@ export default {
       self.$refs[name].validate((valid) => {
         if (!valid) return self.$message.error(Vue.filter('t')('loginFail'));
 
+        self.ruleForm.waiting = true
+
         login(userName, password).then(function (result) {
           var user = {
             userName: userName,
@@ -86,8 +89,12 @@ export default {
         }).then((menu) => {
           setUserMenu(menu)
 
+          self.ruleForm.waiting = false
+
           self.$router.push(PUBLIC_PATH + 'admin/' + getBaseRoute()); //dependency with App.vue's admin path and Menu.vue's adminRoot
         }).catch((error) => {
+          self.ruleForm.waiting = false
+
           self.$message.error(error.message)
         })
       });
