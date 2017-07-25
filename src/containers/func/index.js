@@ -98,7 +98,7 @@ export function getBaseIndex() {
 export function getBaseRoute() {
   var user = getUserInfo()
  
-  return baseIndexMapper[user.roleID].join('/')
+  return user.roleID && baseIndexMapper[user.roleID] && user.roleID && baseIndexMapper[user.roleID].join('/') || ''
 }
 
 export function getAdminMenu(index) {
