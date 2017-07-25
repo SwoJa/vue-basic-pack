@@ -1,6 +1,7 @@
 import axios from 'axios'
 import R from 'ramda'
 import { formData } from 'utils/common'
+import { t } from 'utils/translater'
 
 export function postForm(url, data, options) {
   return callForm('post', url, data, options)
@@ -34,7 +35,7 @@ function callForm(method, url, data, options) {
       'Content-Type': 'application/x-www-form-urlencoded'
     }, options.headers),
     data: formData(data),
-  }).then(parseResponse).catch(catchError)
+  }).then(parseResponse)
 }
 
 function callJSON(method, url, data, options) {
@@ -46,7 +47,7 @@ function callJSON(method, url, data, options) {
       'Content-Type': 'application/json'
     }, options.headers),
     data: data,
-  }).then(parseResponse).catch(catchError)
+  }).then(parseResponse)
 }
 
 var getTotal = R.path(['data', 'data', 'total'])
@@ -54,7 +55,7 @@ var getRows = R.path(['data', 'data', 'rows'])
 var getData = R.path(['data', 'data'])
 
 function parseResponse(response) {
-  if (response.status === 500) throw new Error('Backend Error') //TODO:translation
+  if (response.status === 500) throw new Error(t('backendError') + '(' + response.status + ')')
   
   if (response.statusText === 'OK') return response.status !== 204 ? (getRowsNTotal(response) || getData(response) || response.data) : true
   
@@ -70,9 +71,3 @@ function getRowsNTotal(response) {
 
   return rows
 }
-
-function catchError(error) {
-  console.error(error.stack)
-  throw new Error(error.response && error.response.data ? error.response.data.message : error.message)
-}
-

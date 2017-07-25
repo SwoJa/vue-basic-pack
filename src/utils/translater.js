@@ -779,5 +779,7 @@ var mapper = {
   memberAssetDetailReport: '会员资产细项查询',
 
   existedFunction: '现有功能',
-  givenFunction: '赋予功能'
+  givenFunction: '赋予功能',
+
+  backendError: '系统异常',
 };

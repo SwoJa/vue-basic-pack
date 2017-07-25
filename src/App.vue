@@ -18,7 +18,7 @@ var router = new Router({
       component: Desktop,
       children: [
         {
-          path: 'login', //dependency with Top.vue's login path
+          path: 'login', //dependency with Top.vue and listHelper login path
           name: 'Login',
           component: Login,
         },

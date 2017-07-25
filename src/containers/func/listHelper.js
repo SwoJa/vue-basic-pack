@@ -202,6 +202,28 @@ function mainRemove(params) {
   return mainCallAPI(params, remove);
 }
 
+function mainCallListAPI(params) {
+  var self = callerSelector(params)
+
+  processingHelper(params)
+
+  getList(self.schema.resource, self.currentPage, self.pageSize).then((rows) => {
+    successHelper(params)
+
+    self.isDirty = false
+    self.list = rows
+    self.total = rows.total
+
+    return true
+  }).catch(function(error) {
+    failedHelper(params)
+
+    self.callback = error
+
+    return false
+  })
+}
+
 function mainCallAPI(params, callee) {
   var self = callerSelector(params), data = dataSelector(params)
 
@@ -214,9 +236,7 @@ function mainCallAPI(params, callee) {
 
     return true
   }).catch(function (error) {
-    failedHelper(params)
-
-    self.callback = error
+    failedHelper(params, error)
 
     return false
   })
@@ -226,6 +246,7 @@ export function processingHelper(params) {
   var self = callerSelector(params)
 
   self.waiting = true
+  self.callback = null
   self.error = false
 
   return true
@@ -240,15 +261,17 @@ export function successHelper(params) {
   self.metaData = {}
 
   self.waiting = false
+  self.callback = null
   self.isDirty = true
 
   return true
 }
 
-export function failedHelper(params) {
+export function failedHelper(params, error) {
   var self = callerSelector(params)
 
   self.waiting = false
+  self.callback = error
   self.error = true
 
   return true
@@ -282,17 +305,7 @@ export var listMixin = {
     reloadList() {
       var self = this
 
-      self.waiting = true
-
-      self.getList(self.schema.resource, self.currentPage, self.pageSize).then((rows) => {
-        self.waiting = false
-        self.isDirty = false
-        self.list = rows
-        self.total = rows.total
-      }).catch((error) => {
-        self.waiting = false
-        self.$message.error(error.message)
-      })
+      return mainCallListAPI(self.getParams())
     },
     handleSizeChange(val) {
       var self = this
@@ -340,6 +353,11 @@ export var listMixin = {
   watch: {
     isDirty: function (newValue) {
       if (newValue) this.reloadList()
+    },
+    callback: function(newValue) {
+      if (newValue) {
+        processError(this, newValue)
+      }
     }
   },
   components: {
@@ -384,4 +402,13 @@ export var listEditorMixin = {
       mainEditEnd(this.params)
     }
   },
+}
+
+function processError(self, error) {
+  console.error(error.stack)
+  self.$message.error(error.message)
+
+  if (error.response.status === 401) { // 401:unauthorized
+    self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue and Top.vue login path
+  }
 }

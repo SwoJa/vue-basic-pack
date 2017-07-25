@@ -71,7 +71,7 @@ export default {
 
         self.waitingLogout = false
         
-        self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue's login path
+        self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue and listHelper login path
       }).catch((error) => {
         self.waitingLogout = false
 
