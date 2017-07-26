@@ -29,11 +29,11 @@ import MemberBankAccountPage from 'containers/func/MB/MemberBankAccount'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
-  //   'F001001': { title: 'rateSourceManage', func: Test01 },
-  //   'F001002': { title: 'defaultExchangeHistoryList', func: Test01 },
-  //   'F001003': { title: 'pendingOrderManage', func: Test01 },
-  //   'F001004/:id': { title: 'pendingOrderDetail', func: Test01 },
-  //   'F001005': { title: 'pendingOrderCancel', func: Test01 },
+  //   'F001001': { title: 'rateSourceManage', func: Test01Page },
+  // //   'F001002': { title: 'defaultExchangeHistoryList', func: Test01 },
+  // //   'F001003': { title: 'pendingOrderManage', func: Test01 },
+  // //   'F001004/:id': { title: 'pendingOrderDetail', func: Test01 },
+  // //   'F001005': { title: 'pendingOrderCancel', func: Test01 },
   // }},
   'D002': { title: 'reportManage', children: {
     'F002001': { title: 'orderReport', func: BlankReportPage, args: { reportName: 'OrderReport' } },

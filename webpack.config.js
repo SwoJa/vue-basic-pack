@@ -40,7 +40,7 @@ var env = envs[process.env.NODE_ENV]
 module.exports = {
   entry: {
     app: ['./src/main.js'],
-    vendor: ['axios', 'element-ui', 'moment', 'ramda', 'vue', 'vue-localstorage', 'vue-router'],
+    vendor: ['axios', 'element-ui', 'moment', 'ramda', 'vue', 'vue-localstorage', 'vue-router', 'vue-quill-editor'],
   },
   output: {
     path: path.resolve(__dirname, './dist'),
