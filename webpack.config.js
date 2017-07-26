@@ -1,8 +1,9 @@
 var path = require('path')
 var webpack = require('webpack')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var CleanWebpackPlugin = require('clean-webpack-plugin')
 
-var projectName = quoted('EZCOIN2U')
+var projectName = quoted('EZCOIN2U'), isDev = process.env.NODE_ENV === 'development'
 
 var envs = {
   development: {
@@ -42,11 +43,6 @@ module.exports = {
     app: ['./src/main.js'],
     vendor: ['axios', 'element-ui', 'moment', 'ramda', 'vue', 'vue-localstorage', 'vue-router', 'vue-quill-editor'],
   },
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: env.STATIC_FILE_PATH,
-    filename: 'bundle.js'
-  },
   module: {
     rules: [
       {
@@ -61,12 +57,12 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory=true',
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loader: 'css-loader'
+        loader: 'css-loader' + (isDev ? '?minimize' : '')
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
@@ -79,7 +75,7 @@ module.exports = {
           name: '[name].[ext]?[hash]'
         }
       }
-    ]
+    ],
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
@@ -89,8 +85,13 @@ module.exports = {
     }
   },
   devServer: {
+    publicPath: '/',
+    noInfo: true,
+    compress: false,
     historyApiFallback: true,
-    noInfo: true
+    stats: {
+      colors: true,
+    },
   },
   performance: {
     hints: false
@@ -98,8 +99,7 @@ module.exports = {
   devtool: '#eval-source-map',
   plugins: [
     new webpack.DefinePlugin(env),
-    new webpack.NamedModulesPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' })
+    new webpack.HashedModuleIdsPlugin(),
   ]
 }
 
@@ -107,20 +107,39 @@ if (process.env.NODE_ENV !== 'development') {
   module.exports.output = {
     path: path.resolve(__dirname, './dist'),
     publicPath: env.STATIC_FILE_PATH,
-    filename: 'bundle.js'
+    filename: '[name].[chunkhash].js',
+    chunkFilename: '[chunkhash].js'
   }
   module.exports.plugins = (module.exports.plugins || []).concat([
+    new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: quoted(process.env.NODE_ENV)
       }
     }),
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, 'indexbuild.html'),
-        to: path.join(__dirname, 'dist/index.html'),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      chunks: ['vendor']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'indexbuild.html',
+      minify: {
+        removeComments: true,
+        removeCommentsFromCDATA: true,
+        collapseWhitespace: true,
+        conservativeCollapse: false,
+        removeAttributeQuotes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleTypeAttributes: true,
+        useShortDoctype: true,
+        minifyCSS: true,
+        minifyJS: true
       },
-    ]),
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
   ])
 } else {
   module.exports.output = {
@@ -128,6 +147,9 @@ if (process.env.NODE_ENV !== 'development') {
     publicPath: env.STATIC_FILE_PATH,
     filename: 'bundle.js'
   }
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
+  ])
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -136,7 +158,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
-        warnings: false
+        warnings: false,
       }
     }),
     new webpack.LoaderOptionsPlugin({
