@@ -99,7 +99,6 @@ module.exports = {
   devtool: '#eval-source-map',
   plugins: [
     new webpack.DefinePlugin(env),
-    new webpack.HashedModuleIdsPlugin(),
   ]
 }
 
@@ -111,6 +110,7 @@ if (process.env.NODE_ENV !== 'development') {
     chunkFilename: '[chunkhash].js'
   }
   module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
       'process.env': {
@@ -148,6 +148,7 @@ if (process.env.NODE_ENV !== 'development') {
     filename: 'bundle.js'
   }
   module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.NamedModulesPlugin(),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
   ])
 }
