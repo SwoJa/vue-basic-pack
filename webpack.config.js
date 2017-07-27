@@ -41,7 +41,10 @@ var env = envs[process.env.NODE_ENV]
 module.exports = {
   entry: {
     app: ['./src/main.js'],
-    vendor: ['axios', 'element-ui', 'moment', 'ramda', 'vue', 'vue-localstorage', 'vue-router', 'vue-quill-editor'],
+    vendor: [
+      'axios', 'element-ui', 'moment', 'ramda',
+      'vue', 'vue-localstorage', 'vue-router', 'vue-quill-editor'
+    ],
   },
   module: {
     rules: [
@@ -102,7 +105,17 @@ module.exports = {
   ]
 }
 
-if (process.env.NODE_ENV !== 'development') {
+if (isDev) {
+  module.exports.output = {
+    path: __dirname,
+    publicPath: env.STATIC_FILE_PATH,
+    filename: 'bundle.js'
+  }
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.NamedModulesPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
+  ])
+} else {
   module.exports.output = {
     path: path.resolve(__dirname, './dist'),
     publicPath: env.STATIC_FILE_PATH,
@@ -140,16 +153,6 @@ if (process.env.NODE_ENV !== 'development') {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
-  ])
-} else {
-  module.exports.output = {
-    path: __dirname,
-    publicPath: env.STATIC_FILE_PATH,
-    filename: 'bundle.js'
-  }
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.NamedModulesPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
   ])
 }
 
