@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="'orderDetailList' | t" :visible="showMainDetail" size="large"
+  <el-dialog :title="'orderDetailList' | t" :visible="show" size="large"
     :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
     <div class="dialog-header-operation">
       <el-button @click="handleBack" size="small">{{ 'btnBack' | t }}</el-button>
@@ -24,7 +24,7 @@ export default {
   components: {
     ListTable,
   },
-  props: [ 'showMainDetail', 'initialData', 'params', 'handleBack' ],
+  props: [ 'show', 'initialData', 'params', 'handleBack' ],
   data() {
     return {
       currentPage: 1,

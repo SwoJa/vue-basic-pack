@@ -15,7 +15,8 @@
         <template scope="scope">
           <el-form inline class="table-expand" label-width="140px">
             <el-form-item v-for="column in listExtendColumns" :key="column.prop" :label="column.label | t">
-              <span>{{ column.mapper(scope.row) }}</span>
+              <span v-if="column.meta.type === listMetaType.text">{{ column.mapper(scope.row) }}</span>
+              <el-button v-if="column.meta.type === listMetaType.dialogLink && column.mapper(scope.row)" @click="column.meta.clickHandler(column.mapper(scope.row))" type="text">{{ column.meta.desc | t }}</el-button>
             </el-form-item>            
           </el-form>
         </template>
@@ -37,7 +38,7 @@
 <script>
 import R from 'ramda'
 import {
-  getOPs, getListUnextendColumns, getListExtendColumns, getListData
+  getOPs, getListUnextendColumns, getListExtendColumns, getListData, listMetaType
 } from 'containers/func/listHelper'
 
 export default {
@@ -55,6 +56,9 @@ export default {
       sizes = R.reduce((seed, op) => (seed + (op.size || 2)), 0, self.ops)
 
       return 28 + 27 * sizes + (self.listExtendColumns && self.listExtendColumns.length > 0 ? 24 : 0)
+    },
+    listMetaType: function() {
+      return listMetaType
     },
     listUnextendColumns: function() {
       return getListUnextendColumns(this.schema)

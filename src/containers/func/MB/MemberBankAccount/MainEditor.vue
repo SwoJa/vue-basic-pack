@@ -7,7 +7,7 @@
           <el-option v-for="option in memberOptions" :key="'member' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="'accountNo' | t">
+      <el-form-item :label="'accountNumber' | t">
         <el-input v-model="form.accountNo"></el-input>
       </el-form-item>
       <el-form-item :label="'accountName' | t">
@@ -23,7 +23,7 @@
           <el-option v-for="option in bankOptions" :key="'bank' + option.id" :label="option.text" :value="option.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="'branchName' | t">
+      <el-form-item :label="'branch' | t">
         <el-input v-model="form.branchName"></el-input>
       </el-form-item>
       <el-form-item :label="'swiftCode' | t">

@@ -14,7 +14,9 @@
         <el-button @click="reloadList" :loading="waiting" type="primary" size="small">{{ 'search' | t }}</el-button>
       </div>
     </ListTable>
-    <MainDetail :showMainDetail="showMainDetail" :initialData="initialData" :params="getParams()" :handleBack="handleDetailBack"></MainDetail>
+    <MainDetail :show="showMainDetail" :initialData="initialData" :params="getParams()" :handleBack="handleCloseMainDetail"></MainDetail>
+    <MemberAsset :show="showMemberAsset" :initialData="initialData" :params="getParams()" :handleBack="handleCloseMemberAsset"></MemberAsset>
+    <MemberBankAccount :show="showMemberBankAccount" :initialData="initialData" :params="getParams()" :handleBack="handleCloseMemberBankAccount"></MemberBankAccount>
   </div>
 </template>
 
@@ -23,28 +25,32 @@ import { identity, get, toMark } from 'utils/common'
 import { t } from 'utils/translater'
 import { toLocal12Time } from 'utils/date'
 import { resources, getAll, getAllOptions, getOptionDescByValue } from 'apis'
-import { listMixin, initSchema } from 'containers/func/listHelper'
+import { listMixin, initSchema, listMetaType } from 'containers/func/listHelper'
 import MainDetail from './MainDetail'
+import MemberAsset from './MemberAsset'
+import MemberBankAccount from './MemberBankAccount'
 
 var main = resources.order, orderDetail = resources.orderDetail,
   member = resources.member, orderType = resources.orderType, orderStatus = resources.orderStatus,
   memberAsset = resources.memberAsset, memberBankAccount = resources.memberBankAccount,
-  currency = resources.currency, product = resources.product, country = resources.country
+  bank = resources.bank, currency = resources.currency,
+  product = resources.product, country = resources.country
 
 export default {
   name: 'Order',
   mixins: [listMixin],
   components: {
-    MainDetail
+    MainDetail, MemberAsset, MemberBankAccount,
   },
   data() {
     return {
       memberOptions: [],
-      memberAssetOptions: [],
-      memberBankAccountOptions: [],
       orderTypeOptions: [],
       orderStatusOptions: [],
+      bankOptions: [],
       showMainDetail: false,
+      showMemberAsset: false,
+      showMemberBankAccount: false,
       sysID: '',
     }
   },
@@ -55,20 +61,16 @@ export default {
       self.memberOptions = options
     }).catch(self.callError)
 
-    getAllOptions(memberAsset, true, true).then((options) => {
-      self.memberAssetOptions = options
-    }).catch(self.callError)
-
-    getAllOptions(memberBankAccount, true, true).then((options) => {
-      self.memberBankAccountOptions = options
-    }).catch(self.callError)
-
     getAllOptions(orderType, true, true).then((options) => {
       self.orderTypeOptions = options
     }).catch(self.callError)
 
     getAllOptions(orderStatus, true, true).then((options) => {
       self.orderStatusOptions = options
+    }).catch(self.callError)
+
+    getAllOptions(bank, true, true).then((options) => {
+      self.bankOptions = options
     }).catch(self.callError)
   },
   computed: {
@@ -136,13 +138,13 @@ export default {
             dataName: 'isTradeTimeLimited', defaultData: false,
           },
           memberAssetID: {
-            header: 'address', getter: get('memberAssetID'), sortRank: 1,
-            listSetter: (value) => (getOptionDescByValue(self.memberAssetOptions, value)), listExpnd: true,
+            header: 'memberAsset', getter: get('memberAssetID'), sortRank: 1,
+            listSetter: identity, listExpnd: true, metaData: { type: listMetaType.dialogLink, desc: 'detail', clickHandler: self.handleOpenMemberAssetDialog },
             dataName: 'memberAssetID', defaultData: null,
           },
           memberBankAccountID: {
-            header: 'bankAccount', getter: get('memberBankAccountID'), sortRank: 1,
-            listSetter: (value) => (getOptionDescByValue(self.memberBankAccountOptions, value)), listExpnd: true,
+            header: 'memberBankAccount', getter: get('memberBankAccountID'), sortRank: 1,
+            listSetter: identity, listExpnd: true, metaData: { type: listMetaType.dialogLink, desc: 'detail', clickHandler: self.handleOpenMemberBankAccountDialog },
             dataName: 'memberBankAccountID', defaultData: null,
           },
           currencyID: {
@@ -207,11 +209,39 @@ export default {
         self.initialData = Object.assign({}, self.list[index], { details : result })
       })
     },
-    handleDetailBack: function() {
+    handleCloseMainDetail: function() {
       var self = this
 
       self.showMainDetail = false
       self.initialData = {}
+    },
+    handleCloseMemberAsset: function() {
+      var self = this
+
+      self.showMemberAsset = false
+      self.initialData = {}
+    },
+    handleCloseMemberBankAccount: function() {
+      var self = this
+
+      self.showMemberBankAccount = false
+      self.initialData = {}
+    },
+    handleOpenMemberAssetDialog: function(id) {
+      var self = this
+
+      getAll(memberAsset, id).then((result) => {
+        self.showMemberAsset = true
+        self.initialData = result
+      })
+    },
+    handleOpenMemberBankAccountDialog: function(id) {
+      var self = this
+
+      getAll(memberBankAccount, id).then((result) => {
+        self.showMemberBankAccount = true
+        self.initialData = result
+      })
     },
     updateCondition: function(newValue) {
       var self = this

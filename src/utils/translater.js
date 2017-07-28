@@ -709,6 +709,7 @@ var mapper = {
   validateType_2: '电子邮件',
   validateType_3: '其他媒体',
 
+  memberAsset: '会员资产',
   memberAssetManage: '会员资产管理',
   amountWaiting: '未入帐资产',
   amountUseful: '可用资产',
@@ -824,4 +825,6 @@ var mapper = {
   orderStatus_4200: '卖单转帐确认中',
   orderStatus_4300: '交易已完成',
   orderStatus_4500: '评价已完成',
+
+  query: '查询',
 };

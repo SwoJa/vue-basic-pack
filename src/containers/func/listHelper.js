@@ -22,7 +22,7 @@ var hasHeader = (pairs) => (R.has('header', pairs[1]))
 var hasDataName = (pairs) => (R.has('dataName', pairs[1]))
 var toListColumn = (pairs) => ({
   prop: pairs[0], label: pairs[1].header, mapper: R.compose(pairs[1].listSetter, pairs[1].getter),
-  extend: pairs[1].listExpnd
+  extend: pairs[1].listExpnd, meta: pairs[1].metaData || { type: listMetaType.text },
 })
 var toDataColumn = (pairs) => ({ prop: pairs[1].dataName, mapper: pairs[1].getter })
 var toDefaultPairs = (pairs) => ([pairs[0], pairs[1].defaultData])
@@ -34,7 +34,7 @@ var columns2DataColumn = R.compose(R.map(toDataColumn), R.filter(hasDataName), R
 
 export function getListTotalColumns(schema) {
   if ((!schema) || (!schema.columns)) return [];
-
+  
   return columns2ListColumn(schema.columns)
 }
 
@@ -391,4 +391,9 @@ function processError(self, error) {
   if (error.response.status === 401) { // 401:unauthorized
     self.$router.push(PUBLIC_PATH + 'login') //dependency with App.vue and Top.vue login path
   }
+}
+
+export var listMetaType = {
+  text: 1,
+  dialogLink: 2,
 }
