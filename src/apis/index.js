@@ -1,7 +1,7 @@
 import R from 'ramda'
 import { getJSON, postJSON, putJSON, removeJSON, putForm } from 'apis/common'
 import { t } from 'utils/translater'
-import { get, optionMap } from 'utils/common'
+import { get, optionMap, queryParams } from 'utils/common'
 import { getUserInfo } from 'store'
 
 export var resources = {
@@ -56,8 +56,14 @@ export var resources = {
   noticeType: {
     resourceName: 'CS/NoticeType', idName: 'id', descName: 'description',
   },
+  order: {
+    resourceName: 'OB/Order', idName: 'id', descName: 'id',
+  },
   orderAmountLimit: {
     resourceName: 'SS/OrderAmountLimit', idName: 'id', descName: 'productID',
+  },
+  orderDetail: {
+    resourceName: 'OB/OrderDetail', idName: 'id', descName: 'id',
   },
   orderType: {
     resourceName: 'CS/OrderType', idName: 'id', descName: 'description',
@@ -129,7 +135,7 @@ export function getList(resource, pageNow = 1, pageSize = 10) {
   return getJSON(url + '?pageNow=' + pageNow + '&pageSize=' + pageSize, genAuthorizationHeaders())
 }
 
-export function getAll(resource, id) {
+export function getAll(resource, id, conditions) {
   if (resource === resources.grade) {
     return Promise.resolve(fakedGradeList)
   } else if (resource === resources.orderType) {
@@ -146,7 +152,12 @@ export function getAll(resource, id) {
     url += '/' + id
   }
 
-  return getJSON(url + '?pageNow=1&pageSize=99999999', genAuthorizationHeaders())
+  var queryObj = Object.assign({}, conditions, {
+    pageNow: 1,
+    pageSize: 99999999,
+  })
+
+  return getJSON(url + queryParams(queryObj), genAuthorizationHeaders())
 }
 
 function genAuthorizationHeaders() {
@@ -185,13 +196,13 @@ export function getOptionDescByValue(options, value) {
 
   var selectedOption = R.find((c) => { return c.value === value }, options)
 
-  return selectedOption ? selectedOption.text : value
+  return selectedOption ? selectedOption.text : ''
 }
 
 export function getOptionDescById(options, id) {
-  if (!options || options.length <=0 || id < 0) return '';
+  if (!options || options.length <=0 || !id) return '';
 
   var selectedOption = R.find((c) => { return c.id === id }, options)
 
-  return selectedOption ? selectedOption.text : id
+  return selectedOption ? selectedOption.text : ''
 }

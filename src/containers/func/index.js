@@ -26,6 +26,7 @@ import UserPage from 'containers/func/BM/User'
 import MemberPage from 'containers/func/MB/Member'
 import MemberAssetPage from 'containers/func/MB/MemberAsset'
 import MemberBankAccountPage from 'containers/func/MB/MemberBankAccount'
+import OrderPage from 'containers/func/OB/Order'
 
 var routeTree = {
   // 'D001': { title: 'restingOrderManage', children: {
@@ -71,6 +72,9 @@ var routeTree = {
   }},
   'D006': { title: 'commonSetting', children: {
     'F006001': { title: 'billboardTypeManage', func: BillboardTypePage },
+  }},
+  'D007': { title: 'orderManage', children: {
+    'F007001': { title: 'orderManage', func: OrderPage },
   }},
 }
 

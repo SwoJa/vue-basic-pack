@@ -4,7 +4,7 @@ import { t } from 'utils/translater'
 import { getList, create, update, remove } from 'apis'
 import ListTable from 'components/ListTable'
 
-var callerSelector = get('caller')
+export var callerSelector = get('caller')
 var dataSelector = get('data')
 var metaDataSelector = get('metaData')
 var urlSelector = get('url')
@@ -20,7 +20,10 @@ export function initSchema(schema) {
 
 var hasHeader = (pairs) => (R.has('header', pairs[1]))
 var hasDataName = (pairs) => (R.has('dataName', pairs[1]))
-var toListColumn = (pairs) => ({ prop: pairs[0], label: pairs[1].header, mapper: R.compose(pairs[1].listSetter, pairs[1].getter) })
+var toListColumn = (pairs) => ({
+  prop: pairs[0], label: pairs[1].header, mapper: R.compose(pairs[1].listSetter, pairs[1].getter),
+  extend: pairs[1].listExpnd
+})
 var toDataColumn = (pairs) => ({ prop: pairs[1].dataName, mapper: pairs[1].getter })
 var toDefaultPairs = (pairs) => ([pairs[0], pairs[1].defaultData])
 
@@ -29,16 +32,28 @@ var columnsHasDataPairs = R.compose(R.filter(hasDataName), R.toPairs)
 var columns2DefaultItem = R.compose(R.fromPairs, R.map(toDefaultPairs), columnsHasDataPairs)
 var columns2DataColumn = R.compose(R.map(toDataColumn), R.filter(hasDataName), R.toPairs)
 
-export function getListColumns(schema) {
+export function getListTotalColumns(schema) {
   if ((!schema) || (!schema.columns)) return [];
 
   return columns2ListColumn(schema.columns)
 }
 
+export function getListUnextendColumns(schema) {
+  if ((!schema) || (!schema.columns)) return [];
+
+  return R.filter((column) => (!column.extend), columns2ListColumn(schema.columns))
+}
+
+export function getListExtendColumns(schema) {
+  if ((!schema) || (!schema.columns)) return [];
+
+  return R.filter((column) => (column.extend), columns2ListColumn(schema.columns))
+}
+
 export function getListData(schema, list) {
   if ((!schema) || (!schema.columns) || !list || list.length <= 0) return [];
 
-  var listColumns = getListColumns(schema)
+  var listColumns = getListTotalColumns(schema)
 
   return R.map((row) => (R.fromPairs(R.map((column) => ([column.prop, column.mapper(row)]), listColumns))), list)
 }
