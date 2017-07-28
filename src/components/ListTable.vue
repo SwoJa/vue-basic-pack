@@ -1,8 +1,13 @@
 <template>
   <div class="list-table">
-    <el-row type="flex" justify="end" align="middle">
+    <el-row type="flex" align="middle">
       <div class="list-table-header">
-        <slot name="outsideOperations"></slot>
+        <div class="outside-inputs">
+          <slot name="outside-inputs"></slot>
+        </div>
+        <div class="outside-buttons">
+          <slot name="outside-buttons"></slot>
+        </div>
       </div>
     </el-row>
     <el-table :data="listData" style="width: 100%" :height="listHeight">
@@ -72,6 +77,11 @@ export default {
 
   .list-table-header {
     width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .table-expand .el-form-item {
