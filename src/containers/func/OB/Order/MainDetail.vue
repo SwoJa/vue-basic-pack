@@ -38,6 +38,9 @@ export default {
     memberOptions: function() {
       return this.caller.memberOptions
     },
+    orderStatusOptions: function() {
+      return this.caller.orderStatusOptions
+    },
     schema: function() {
       var self = this
 
@@ -79,7 +82,7 @@ export default {
           },
           orderDetailStatus: {
             header: 'orderDetailStatus', getter: get('orderDetailStatus'), sortRank: 1,
-            listSetter: identity,
+            listSetter: (value) => (getOptionDescByValue(self.orderStatusOptions, value)),
             dataName: 'orderDetailStatus', defaultData: '',
           },
           orderPrice: {

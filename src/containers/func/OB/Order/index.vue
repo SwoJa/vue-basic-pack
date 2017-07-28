@@ -27,7 +27,7 @@ import { listMixin, initSchema } from 'containers/func/listHelper'
 import MainDetail from './MainDetail'
 
 var main = resources.order, orderDetail = resources.orderDetail,
-  member = resources.member, orderType = resources.orderType,
+  member = resources.member, orderType = resources.orderType, orderStatus = resources.orderStatus,
   memberAsset = resources.memberAsset, memberBankAccount = resources.memberBankAccount,
   currency = resources.currency, product = resources.product, country = resources.country
 
@@ -43,6 +43,7 @@ export default {
       memberAssetOptions: [],
       memberBankAccountOptions: [],
       orderTypeOptions: [],
+      orderStatusOptions: [],
       showMainDetail: false,
       sysID: '',
     }
@@ -64,6 +65,10 @@ export default {
 
     getAllOptions(orderType, true, true).then((options) => {
       self.orderTypeOptions = options
+    }).catch(self.callError)
+
+    getAllOptions(orderStatus, true, true).then((options) => {
+      self.orderStatusOptions = options
     }).catch(self.callError)
   },
   computed: {
@@ -94,7 +99,7 @@ export default {
           },
           orderStatus: {
             header: 'orderStatus', getter: get('orderStatus'), sortRank: 1,
-            listSetter: identity,
+            listSetter: (value) => (getOptionDescByValue(self.orderStatusOptions, value)),
             dataName: 'orderStatus', defaultData: '',
           },
           payMethod: {

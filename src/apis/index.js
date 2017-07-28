@@ -65,6 +65,9 @@ export var resources = {
   orderDetail: {
     resourceName: 'OB/OrderDetail', idName: 'id', descName: 'id',
   },
+  orderStatus: {
+    resource: 'CS/OrderStatus', idName: 'id', descName: 'description',
+  },
   orderType: {
     resourceName: 'CS/OrderType', idName: 'id', descName: 'description',
   },
@@ -113,6 +116,31 @@ var fakedNoticeTypeList = [
   { id: 'bulletin', description: 'noticeType_bulletin' },
 ];
 
+var fakedOrderStatusList = [
+  { id: '1000', description: 'orderStatus_1000' },
+  { id: '1100', description: 'orderStatus_1100' },
+  { id: '1150', description: 'orderStatus_1150' },
+  { id: '1200', description: 'orderStatus_1200' },
+  { id: '1500', description: 'orderStatus_1500' },
+  { id: '2000', description: 'orderStatus_2000' },
+  { id: '2100', description: 'orderStatus_2100' },
+  { id: '2150', description: 'orderStatus_2150' },
+  { id: '2200', description: 'orderStatus_2200' },
+  { id: '2500', description: 'orderStatus_2500' },
+  { id: '3000', description: 'orderStatus_3000' },
+  { id: '3100', description: 'orderStatus_3100' },
+  { id: '3110', description: 'orderStatus_3110' },
+  { id: '3120', description: 'orderStatus_3120' },
+  { id: '3200', description: 'orderStatus_3200' },
+  { id: '3300', description: 'orderStatus_3300' },
+  { id: '3500', description: 'orderStatus_3500' },
+  { id: '4000', description: 'orderStatus_4000' },
+  { id: '4100', description: 'orderStatus_4100' },
+  { id: '4200', description: 'orderStatus_4200' },
+  { id: '4300', description: 'orderStatus_4300' },
+  { id: '4500', description: 'orderStatus_4500' },
+];
+
 export function create(url, data) {
   return postJSON(url, data, genAuthorizationHeaders())
 }
@@ -135,7 +163,6 @@ export function getList(resource, conditions, pageNow = 1, pageSize = 10) {
     pageSize: pageSize,
   })
 
-
   return getJSON(url + queryParams(queryObj), genAuthorizationHeaders())
 }
 
@@ -148,6 +175,8 @@ export function getAll(resource, id, conditions) {
     return Promise.resolve(fakedDiscountTypeList)
   } else if (resource === resources.noticeType) {
     return Promise.resolve(fakedNoticeTypeList)
+  } else if (resource === resources.orderStatus) {
+    return Promise.resolve(fakedOrderStatusList)
   }
 
   var url = API_HOST + '/' + resource.resourceName
