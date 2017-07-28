@@ -1,11 +1,19 @@
 <template>
   <div class="list-page">
     <el-row>
-      <el-col :span="6">{{ 'orderManage' | t }}</el-col>
+      <el-col :span="6">{{ 'queryOrder' | t }}</el-col>
     </el-row>
     <ListTable :list="list" :schema="schema" :listHeight="listHeight" :operation="operation" :currentPage="currentPage" :pageSize="pageSize" :total="total" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange">
-      <div slot="outsideOperations">
-        <el-button @click="reloadList" :loading="waiting" type="primary" size="small">{{ 'search' | t }}</el-button>
+      <div slot="outsideOperations" class="outside-conditions">
+        <div class="outside-inputs">
+          <label>{{ 'userName' | t }}</label>
+          <el-select v-model="sysID" filterable clearable size="small">
+            <el-option v-for="option in memberOptions" :key="option.id" :label="option.text" :value="option.value"></el-option>
+          </el-select>
+        </div>
+        <div class="outside-buttons">
+          <el-button @click="reloadList" :loading="waiting" type="primary" size="small">{{ 'search' | t }}</el-button>
+        </div>
       </div>
     </ListTable>
     <MainDetail :showMainDetail="showMainDetail" :initialData="initialData" :params="getParams()" :handleBack="handleDetailBack"></MainDetail>
@@ -38,6 +46,7 @@ export default {
       memberBankAccountOptions: [],
       orderTypeOptions: [],
       showMainDetail: false,
+      sysID: '',
     }
   },
   created() {
@@ -200,9 +209,22 @@ export default {
 
       self.showMainDetail = false
       self.initialData = {}
+    },
+    updateCondition: function(newValue) {
+      var self = this
+
+      self.conditions.sysID = newValue
     }
+  },
+  watch: {
+    sysID: function (newValue) {
+      var self = this
+
+      self.conditions = Object.assign({}, self.conditions, { sysID: newValue })
+    },
   },
 }
 </script>
 
 <style src="containers/func/list.scss" scoped></style>
+

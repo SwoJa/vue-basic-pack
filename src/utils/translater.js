@@ -776,6 +776,7 @@ var mapper = {
   backendError: '系统异常',
 
   orderManage: '订单管理',
+  queryOrder: '查询订单',
   queryOrderDetail: '查询子单',
   orderRecord: '订单记录',
   orderAmount: '申购金额',

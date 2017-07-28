@@ -129,10 +129,14 @@ export function remove(url) {
   return removeJSON(url, genAuthorizationHeaders())
 }
 
-export function getList(resource, pageNow = 1, pageSize = 10) {
-  var url = API_HOST + '/' + resource.resourceName
+export function getList(resource, conditions, pageNow = 1, pageSize = 10) {
+  var url = API_HOST + '/' + resource.resourceName, queryObj = Object.assign({}, conditions, {
+    pageNow: pageNow,
+    pageSize: pageSize,
+  })
 
-  return getJSON(url + '?pageNow=' + pageNow + '&pageSize=' + pageSize, genAuthorizationHeaders())
+
+  return getJSON(url + queryParams(queryObj), genAuthorizationHeaders())
 }
 
 export function getAll(resource, id, conditions) {

@@ -1,7 +1,9 @@
 <template>
   <div class="list-table">
     <el-row type="flex" justify="end" align="middle">
-      <slot name="outsideOperations"></slot>
+      <div class="list-table-header">
+        <slot name="outsideOperations"></slot>
+      </div>
     </el-row>
     <el-table :data="listData" style="width: 100%" :height="listHeight">
       <el-table-column v-if="listExtendColumns.length > 0" type="expand">
@@ -68,11 +70,13 @@ export default {
     margin: 1vh 1vw;
   }
 
+  .list-table-header {
+    width: 100%;
+  }
+
   .table-expand .el-form-item {
     width: 33%;
     margin: 0;
   }
 }
-
-
 </style>

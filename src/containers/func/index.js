@@ -74,7 +74,7 @@ var routeTree = {
     'F006001': { title: 'billboardTypeManage', func: BillboardTypePage },
   }},
   'D007': { title: 'orderManage', children: {
-    'F007001': { title: 'orderManage', func: OrderPage },
+    'F007001': { title: 'queryOrder', func: OrderPage },
   }},
 }
 

@@ -80,8 +80,7 @@ function getDefaultItem(schema) {
 
 function initState(state) {
   return Object.assign({
-    editingCondition: {},
-    condition: {},
+    conditions: {},
     showEditor: false,
     isAdding: false,
     isModifying: false,
@@ -103,40 +102,6 @@ export function getOPs(op) {
   if (!op) return [];
 
   return R.values(op)
-}
-
-function mainQueryInit(params) {
-  var self = callerSelector(params)
-
-  self.condition = {}
-  self.editingCondition = {}
-
-  return true
-}
-
-function mainQueryConditionChange(params, data) {
-  var self = callerSelector(params), editingCondition = self.editingCondition,
-    newCondition = Object.assign({}, editingCondition, data)
-
-  params.data = newCondition;
-
-  return mainQueryChanging(params) && mainQueryChanged(params);
-}
-
-function mainQueryChanging(params) {
-  var self = callerSelector(params)
-
-  self.editingCondition = dataSelector(params)
-
-  return true
-}
-
-function mainQueryChanged(params) {
-  var self = callerSelector(params)
-
-  self.condition = self.editingCondition
-
-  return true;
 }
 
 var mainStatusOptions = [
@@ -222,7 +187,7 @@ function mainCallListAPI(params) {
 
   processingHelper(params)
 
-  getList(self.schema.resource, self.currentPage, self.pageSize).then((rows) => {
+  getList(self.schema.resource, self.conditions, self.currentPage, self.pageSize).then((rows) => {
     successHelper(params)
 
     self.isDirty = false
